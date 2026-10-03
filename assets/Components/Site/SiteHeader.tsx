@@ -9,6 +9,24 @@ const links = [
     { href: "/contact", label: "Contact" },
 ];
 
+const boltPath =
+    "M0 6 L12 5 L17 10 L29 2 L35 8 L49 4 L54 11 L67 3 L73 8 L87 2 L100 6";
+
+/** Crackling lightning under a menu item, shown on hover and on the active page. */
+function NavBolt() {
+    return (
+        <svg
+            className="nav-bolt"
+            viewBox="0 0 100 12"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+        >
+            <path className="nav-bolt-glow" d={boltPath} pathLength={1} />
+            <path className="nav-bolt-core" d={boltPath} pathLength={1} />
+        </svg>
+    );
+}
+
 export default function SiteHeader() {
     const { url } = usePage();
     const [open, setOpen] = useState(false);
@@ -42,6 +60,7 @@ export default function SiteHeader() {
                         aria-current={url === link.href ? "page" : undefined}
                     >
                         {link.label}
+                        <NavBolt />
                     </Link>
                 ))}
             </nav>
