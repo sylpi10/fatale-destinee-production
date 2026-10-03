@@ -34,8 +34,17 @@ export default function SiteHeader() {
     // Close the mobile menu after each navigation.
     useEffect(() => setOpen(false), [url]);
 
+    // Past the top of the page, the header becomes a fixed bar.
+    const [fixed, setFixed] = useState(false);
+    useEffect(() => {
+        const onScroll = () => setFixed(scrollY > 80);
+        onScroll();
+        addEventListener("scroll", onScroll, { passive: true });
+        return () => removeEventListener("scroll", onScroll);
+    }, []);
+
     return (
-        <header className="site-header">
+        <header className={fixed ? "site-header is-fixed" : "site-header"}>
             <Link href="/" className="site-brand" aria-label="Accueil">
                 F · D · P
             </Link>
