@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
-import AppLayout from "./Layouts/AppLayout";
 import GuestLayout from "./Layouts/GuestLayout";
+import SiteLayout from "./Layouts/SiteLayout";
 
 type PageModule = { default: ComponentType<any> };
 
@@ -18,5 +18,5 @@ export function resolvePage(name: string) {
 export function resolveLayout(
     name: string,
 ): ComponentType<{ children: ReactNode }> {
-    return name.startsWith("Auth/") ? GuestLayout : AppLayout;
+    return name.startsWith("Auth/") ? GuestLayout : SiteLayout;
 }

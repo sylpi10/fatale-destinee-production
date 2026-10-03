@@ -1,24 +1,26 @@
-import { Link } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
+import PageHeader from "../Components/Site/PageHeader";
 
 type Props = { status: number };
 
 const messages: Record<number, { title: string; description: string }> = {
     403: {
-        title: "Forbidden",
-        description: "You don't have access to this page.",
+        title: "Accès refusé",
+        description: "Vous n'avez pas accès à cette page.",
     },
     404: {
-        title: "Page not found",
-        description: "Sorry, the page you are looking for doesn't exist.",
+        title: "Page introuvable",
+        description: "Désolé, la page que vous cherchez n'existe pas.",
     },
     500: {
-        title: "Server error",
+        title: "Erreur serveur",
         description:
-            "Something went wrong on our side. Please try again later.",
+            "Une erreur est survenue de notre côté. Merci de réessayer plus tard.",
     },
     503: {
-        title: "Service unavailable",
-        description: "We're doing some maintenance. Please check back soon.",
+        title: "Service indisponible",
+        description:
+            "Le site est en maintenance. Revenez dans quelques instants.",
     },
 };
 
@@ -26,14 +28,17 @@ export default function ErrorPage({ status }: Props) {
     const { title, description } = messages[status] ?? messages[500];
 
     return (
-        <div className="container">
-            <div className="error-page">
-                <h1>
-                    {status} · {title}
-                </h1>
-                <p>{description}</p>
-                <Link href="/">Back to home</Link>
+        <>
+            <Head title={`${title} – Fatale Destinée Production`} />
+            <PageHeader title={String(status)} subtitle={title} />
+            <div className="page-body">
+                <section className="panel panel--center">
+                    <p>{description}</p>
+                    <Link href="/" className="gold-button">
+                        Retour à l'accueil
+                    </Link>
+                </section>
             </div>
-        </div>
+        </>
     );
 }
