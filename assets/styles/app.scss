@@ -1,6 +1,12 @@
 @use "variables" as *;
 @use "nav" as *;
+@use "hero" as *;
+@use "header" as *;
+@use "panel" as *;
+@use "gallery" as *;
 @use "form" as *;
+@use "contact" as *;
+@use "footer" as *;
 @use "site";
 
 body {
