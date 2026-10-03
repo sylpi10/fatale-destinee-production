@@ -4,6 +4,7 @@ import FlashMessages from "../Components/FlashMessages";
 import SiteFooter from "../Components/Site/SiteFooter";
 import SiteHeader from "../Components/Site/SiteHeader";
 import VerifyEmailBanner from "../Components/VerifyEmailBanner";
+import BigBolt from "../Components/Site/BigBolt";
 
 export default function SiteLayout({ children }: { children: ReactNode }) {
     const { component } = usePage();
@@ -17,6 +18,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
                 <FlashMessages />
                 {children}
             </main>
+            <BigBolt />
             {!isHome && <SiteFooter />}
         </div>
     );
