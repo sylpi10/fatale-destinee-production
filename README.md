@@ -16,6 +16,8 @@ symfony serve -d   # serveur PHP → http://127.0.0.1:8000
 npm run dev        # Vite : JS + Sass compilés à la volée, rechargement auto
 ```
 
+Si les modifs n'apparaissent plus en live après un `npm run build` / `make deploy` : relancer `npm run dev`.
+
 ## Lancer en SSR
 
 ```bash
