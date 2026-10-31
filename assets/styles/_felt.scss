@@ -10,10 +10,37 @@
     height: 0;
 }
 
+// Distance from the screen edge to the red line; smaller on phones.
+:root {
+    --felt-inset: #{$felt-inset};
+
+    @media (max-width: $bp-mobile) {
+        --felt-inset: 8px;
+    }
+}
+
+// Paper margin between the screen edge and the red line, so nothing that scrolls
+// shows outside the frame. Same paper as the body (grain fixed on both, so it lines
+// up); the mask keeps only the edges and lets the middle through.
+.felt-mat {
+    position: fixed;
+    inset: 0;
+    z-index: 44;
+    pointer-events: none;
+    // Runs under the red line, so the wobble never shows a gap.
+    padding: calc(var(--felt-inset) + 2px);
+    background: inherit;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+// Above the open menu too (40), under the MENU button (50).
 .felt-border {
     position: fixed;
-    inset: $felt-inset;
-    z-index: 30;
+    inset: var(--felt-inset);
+    z-index: 45;
     pointer-events: none;
     border: 5px solid $red;
     border-radius: 6px;
@@ -21,7 +48,6 @@
     filter: url(#felt);
 
     @media (max-width: $bp-mobile) {
-        inset: 8px;
         border-width: 4px;
     }
 }
