@@ -35,6 +35,7 @@ RSYNC_EXCLUDES = \
 	--exclude=/public/uploads/*/* \
 	--exclude=/tests/ \
 	--exclude=/.env.local \
+	--exclude=/.env.dev \
 	--exclude=/.env.*.local \
 	--exclude=/.env.deploy \
 	--exclude=/.phpunit.cache/ \
@@ -57,6 +58,8 @@ deploy:
 remote:
 	# premier déploiement : crée le .env.local de prod (APP_SECRET généré sur le serveur), jamais écrasé ensuite
 	$(SSH) 'cd ~/$(APP_PATH) && test -f .env.local || { printf "APP_ENV=prod\nAPP_SECRET=%s\nDEFAULT_URI=$(APP_URL)\n" "$$($(PHP) -r "echo bin2hex(random_bytes(16));")" > .env.local && chmod 600 .env.local && echo ".env.local créé"; }'
+	# le cache prod n'est jamais recompilé tout seul (debug=false) : on le jette avant que composer ne boote le kernel
+	$(SSH) 'rm -rf ~/$(APP_PATH)/var/cache/prod'
 	$(SSH) 'cd ~/$(APP_PATH) && APP_ENV=prod $(COMPOSER) install --no-dev --optimize-autoloader --classmap-authoritative --no-interaction'
 ifeq ($(MIGRATE),1)
 	$(SSH) '$(CONSOLE) doctrine:migrations:migrate --allow-no-migration'

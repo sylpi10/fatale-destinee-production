@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Show;
+use App\Image\WebpConverter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -27,6 +28,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 final class ShowCrudController extends AbstractCrudController
 {
     public const string UPLOAD_PATH = 'uploads/spectacles';
+
+    public function __construct(
+        private readonly WebpConverter $webpConverter,
+    ) {
+    }
 
     public static function getEntityFqcn(): string
     {
@@ -65,7 +71,9 @@ final class ShowCrudController extends AbstractCrudController
         yield ImageField::new('image', 'Photo principale')
             ->setBasePath(self::UPLOAD_PATH)
             ->setUploadDir('public/'.self::UPLOAD_PATH)
-            ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]')
+            ->setUploadedFileNamePattern('[slug]-[randomhash].webp')
+            ->setFormTypeOption('upload_new', $this->webpConverter)
+            ->mimeTypes('image/jpeg,image/png,image/gif,image/webp', 'JPEG, PNG, GIF ou WebP uniquement.')
             ->setHelp('En haut de la page et dans la liste des spectacles.');
         yield AssociationField::new('member', 'Porté par')
             ->setQueryBuilder(static fn ($queryBuilder) => $queryBuilder->andWhere('entity.member = true'))

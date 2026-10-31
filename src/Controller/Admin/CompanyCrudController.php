@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Company;
+use App\Image\WebpConverter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -20,6 +21,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 final class CompanyCrudController extends AbstractCrudController
 {
     public const string UPLOAD_PATH = 'uploads/compagnie';
+
+    public function __construct(
+        private readonly WebpConverter $webpConverter,
+    ) {
+    }
 
     public static function getEntityFqcn(): string
     {
@@ -51,7 +57,9 @@ final class CompanyCrudController extends AbstractCrudController
         yield ImageField::new('image', 'Image')
             ->setBasePath(self::UPLOAD_PATH)
             ->setUploadDir('public/'.self::UPLOAD_PATH)
-            ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]')
+            ->setUploadedFileNamePattern('[slug]-[randomhash].webp')
+            ->setFormTypeOption('upload_new', $this->webpConverter)
+            ->mimeTypes('image/jpeg,image/png,image/gif,image/webp', 'JPEG, PNG, GIF ou WebP uniquement.')
             ->setHelp('À côté du texte de présentation. Vide : le logo.');
         yield TextareaField::new('presentation', 'Présentation')
             ->setNumOfRows(14)

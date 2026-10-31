@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Image\WebpConverter;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -23,6 +24,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
  */
 final class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private readonly WebpConverter $webpConverter,
+    ) {
+    }
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -43,7 +49,9 @@ final class UserCrudController extends AbstractCrudController
         yield ImageField::new('photo', 'Portrait')
             ->setBasePath(CompanyCrudController::UPLOAD_PATH)
             ->setUploadDir('public/'.CompanyCrudController::UPLOAD_PATH)
-            ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]');
+            ->setUploadedFileNamePattern('[slug]-[randomhash].webp')
+            ->setFormTypeOption('upload_new', $this->webpConverter)
+            ->mimeTypes('image/jpeg,image/png,image/gif,image/webp', 'JPEG, PNG, GIF ou WebP uniquement.');
         yield TextField::new('firstName', 'Prénom')->hideOnIndex();
         yield TextField::new('lastName', 'Nom')->hideOnIndex();
         yield TextField::new('fullName', 'Nom')->onlyOnIndex();

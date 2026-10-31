@@ -59,6 +59,42 @@ final class ShowCrudControllerTest extends WebTestCase
         self::assertSelectorTextSame('h1', 'Nouveau spectacle');
     }
 
+    public function testUploadedPhotoIsStoredAndShownAsWebp(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser(['ROLE_ADMIN']));
+        $client->followRedirects();
+
+        $png = sys_get_temp_dir().'/affiche-'.bin2hex(random_bytes(4)).'.png';
+        imagepng(imagecreatetruecolor(30, 20), $png);
+
+        $crawler = $client->request('GET', '/admin');
+        $crawler = $client->click($crawler->selectLink('Créer Spectacle')->link());
+        $form = $crawler->selectButton('Créer')->form([
+            'Show[title]' => 'Spectacle illustré',
+            'Show[slug]' => 'spectacle-illustre',
+            'Show[published]' => '1',
+        ]);
+        $form['Show[image][file]']->upload($png);
+        $client->submit($form);
+        self::assertResponseIsSuccessful();
+
+        $show = static::getContainer()->get(ShowRepository::class)->findOneBy(['slug' => 'spectacle-illustre']);
+        self::assertInstanceOf(Show::class, $show);
+        self::assertStringEndsWith('.webp', (string) $show->getImage());
+        $stored = static::getContainer()->getParameter('kernel.project_dir').'/public/uploads/spectacles/'.$show->getImage();
+
+        try {
+            self::assertSame(IMAGETYPE_WEBP, exif_imagetype($stored));
+
+            $client->request('GET', '/spectacles/spectacle-illustre');
+            self::assertSelectorExists(\sprintf('img[src$="/uploads/spectacles/%s"]', $show->getImage()));
+        } finally {
+            @unlink($stored);
+            @unlink($png);
+        }
+    }
+
     public function testAdminEditsTheCompanyAndAMember(): void
     {
         $client = static::createClient();
