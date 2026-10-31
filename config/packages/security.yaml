@@ -21,7 +21,7 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                username_parameter: email
+                username_parameter: username
                 password_parameter: password
                 enable_csrf: true
                 default_target_path: app_home
@@ -40,7 +40,7 @@ security:
 
     # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

@@ -13,7 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class SecurityControllerTest extends WebTestCase
 {
-    private const string EMAIL = 'admin@example.com';
+    private const string USERNAME = 'admin';
 
     private KernelBrowser $client;
 
@@ -23,8 +23,8 @@ final class SecurityControllerTest extends WebTestCase
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
 
-        $user = $container->get(UserRepository::class)->findOneBy(['email' => self::EMAIL]) ?? new User();
-        $user->setEmail(self::EMAIL);
+        $user = $container->get(UserRepository::class)->findOneBy(['username' => self::USERNAME]) ?? new User();
+        $user->setUsername(self::USERNAME);
         $user->setPassword($container->get(UserPasswordHasherInterface::class)->hashPassword($user, 'secret1234'));
         $entityManager->persist($user);
         $entityManager->flush();
@@ -36,7 +36,7 @@ final class SecurityControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/');
         $this->client->followRedirect();
-        self::assertSame(self::EMAIL, $this->client->getContainer()->get('security.token_storage')->getToken()?->getUserIdentifier());
+        self::assertSame(self::USERNAME, $this->client->getContainer()->get('security.token_storage')->getToken()?->getUserIdentifier());
     }
 
     public function testWrongPasswordShowsAnError(): void
@@ -46,14 +46,14 @@ final class SecurityControllerTest extends WebTestCase
         self::assertResponseRedirects('/login');
         $this->client->followRedirect();
         self::assertSelectorTextSame('.form-error', 'Invalid credentials.');
-        self::assertInputValueSame('email', self::EMAIL);
+        self::assertInputValueSame('username', self::USERNAME);
     }
 
     private function login(string $password): void
     {
         $this->client->request('GET', '/login');
         $this->client->submitForm('Se connecter', [
-            'email' => self::EMAIL,
+            'username' => self::USERNAME,
             'password' => $password,
         ]);
     }

@@ -6,16 +6,16 @@
     <twig:PageTitle title="Spectacles" />
 
     <div class="shows">
-        <a class="show-card" href="{{ path('app_show', {slug: 'qu-est-ce-que-je-fous-la'}) }}">
-            <img src="{{ asset('images/spectacles/qu-est-ce-que-je-fous-la.webp') }}" alt="" width="1600" height="1200">
-            <h2>Qu'est-ce que je fous là ?</h2>
-            <p>Teddy Moulin · Clown · Création 2026</p>
-        </a>
-        {# Angéline's show: content to come. #}
-        <div class="show-card">
-            <img src="{{ asset('images/spectacles/angeline-solo.webp') }}" alt="" width="1600" height="1200">
-            <h2>Girouette Manigance</h2>
-            <p>Angéline Delourme · Page à venir</p>
-        </div>
+        {% for show in shows %}
+            <a class="show-card" href="{{ path('app_show', {slug: show.slug}) }}">
+                {% if show.image %}
+                    <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
+                {% endif %}
+                <h2>{{ show.title }}</h2>
+                <p>{{ [show.author, show.genre, show.creationYear ? 'Création ' ~ show.creationYear]|filter(v => v)|join(' · ') }}</p>
+            </a>
+        {% else %}
+            <p>Les spectacles arrivent bientôt.</p>
+        {% endfor %}
     </div>
 {% endblock %}

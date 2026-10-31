@@ -199,3 +199,14 @@
         color: $ink-soft;
     }
 }
+
+.teaser {
+    padding: 8px;
+
+    iframe {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border: 0;
+    }
+}

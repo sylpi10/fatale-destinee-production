@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\UniqueConstraint(name: "UNIQ_IDENTIFIER_EMAIL", fields: ["email"])]
+#[ORM\UniqueConstraint(name: "UNIQ_IDENTIFIER_USERNAME", fields: ["username"])]
+#[UniqueEntity(fields: "username", message: "Ce pseudo est déjà pris.")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,8 +19,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $email = null;
+    /** Login of the account (there is no email: accounts are created in the console). */
+    #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Regex("/^[\\w.-]{3,50}$/u", message: "3 à 50 lettres, chiffres, points, tirets ou soulignés.")]
+    private ?string $username = null;
 
     /**
      * @var list<string> The user roles
@@ -31,34 +37,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    /**
-     * Whether the user has verified their email address
-     */
-    #[ORM\Column(options: ["default" => false])]
-    private bool $isVerified = false;
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getUsername(): ?string
     {
-        return $this->email;
+        return $this->username;
     }
 
-    public static function normalizeEmail(string $email): string
+    public function setUsername(string $username): static
     {
-        return mb_strtolower(trim($email));
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = self::normalizeEmail($email);
+        $this->username = trim($username);
 
         return $this;
     }
-
 
     /**
      * A visual identifier that represents this user.
@@ -67,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -120,17 +114,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $data;
     }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
 }

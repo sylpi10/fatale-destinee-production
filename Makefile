@@ -22,7 +22,8 @@ SSH = ssh $(SERVER_USER)@$(SERVER_HOST)
 CONSOLE = cd ~/$(APP_PATH) && $(PHP) bin/console --env=prod --no-interaction
 
 # Ce qui ne part jamais sur le serveur. Les fichiers exclus ne sont pas non plus
-# supprimés par --delete : le .env.local et le var/ du serveur sont préservés.
+# supprimés par --delete : le .env.local, le var/ et les fichiers envoyés depuis
+# l'admin (public/uploads) du serveur sont préservés.
 RSYNC_EXCLUDES = \
 	--exclude=/.git/ \
 	--exclude=/.idea/ \
@@ -31,6 +32,7 @@ RSYNC_EXCLUDES = \
 	--exclude=/var/ \
 	--exclude=/assets/vendor/ \
 	--exclude=/public/assets/ \
+	--exclude=/public/uploads/*/* \
 	--exclude=/tests/ \
 	--exclude=/.env.local \
 	--exclude=/.env.*.local \

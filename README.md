@@ -29,10 +29,22 @@ servis à la volée et les modifs n'apparaîtraient plus (supprimer `public/asse
 - Formulaires : Symfony Form, thème commun dans `templates/form/site_theme.html.twig`.
 - Styles : `assets/styles/app.scss` et ses partials.
 
+## Admin
+
+EasyAdmin sur `/admin` (rôle `ROLE_ADMIN`), connexion via `/login`. Pas d'inscription : les comptes se créent en console.
+
+```bash
+php bin/console app:admin:create pseudo                # demande le mot de passe ; le réinitialise si le compte existe
+php bin/console doctrine:fixtures:load                # dev : spectacles du brief + admin / admin1234 (vide la base !)
+```
+
+Les fichiers envoyés depuis l'admin vont dans `public/uploads/` : ignorés par git et jamais écrasés par `make deploy`.
+
 ## Tests
 
 ```bash
-php bin/console doctrine:migrations:migrate --env=test   # une fois, base SQLite de test
+php bin/console doctrine:database:create --env=test      # une fois : base fataledestinee_test (MariaDB)
+php bin/console doctrine:migrations:migrate --env=test
 php bin/phpunit
 ```
 

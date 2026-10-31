@@ -1,5 +1,6 @@
 ###> symfony/framework-bundle ###
 /.env.local
+/.env.dev
 /.env.deploy
 /.env.local.php
 /.env.*.local
@@ -21,4 +22,9 @@
 
 ###> symfonycasts/sass-bundle ###
 /public/assets/
+
 ###< symfonycasts/sass-bundle ###
+
+# Files uploaded from the admin
+/public/uploads/*/*
+!/public/uploads/*/.gitkeep

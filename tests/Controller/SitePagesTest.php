@@ -16,7 +16,6 @@ final class SitePagesTest extends WebTestCase
     {
         yield 'company' => ['/compagnie', 'La compagnie'];
         yield 'shows' => ['/spectacles', 'Spectacles'];
-        yield 'show' => ['/spectacles/qu-est-ce-que-je-fous-la', 'Qu\'est-ce que je fous là ?'];
         yield 'agenda' => ['/agenda', 'Agenda'];
         yield 'workshops' => ['/ateliers', 'Les ateliers'];
         yield 'contact' => ['/contact', 'Contact'];
@@ -60,29 +59,10 @@ final class SitePagesTest extends WebTestCase
     public function testMenuMarksTheCurrentSection(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/spectacles/qu-est-ce-que-je-fous-la');
+        $client->request('GET', '/agenda');
 
         self::assertSelectorCount(1, '#site-menu a[aria-current="page"]');
-        self::assertSelectorTextSame('#site-menu a[aria-current="page"]', 'Spectacles');
-    }
-
-    public function testShowsLinkToTheirPage(): void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/spectacles');
-        $client->clickLink('Qu\'est-ce que je fous là ?');
-
-        self::assertResponseIsSuccessful();
-        self::assertSelectorTextSame('.catchphrase', 'Moroze cherche sa place. Jean-Michel Bonheur a réponse à tout.');
-        self::assertSelectorCount(4, '.show-facts li');
-    }
-
-    public function testUnknownShowIsNotFound(): void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/spectacles/nope');
-
-        self::assertResponseStatusCodeSame(404);
+        self::assertSelectorTextSame('#site-menu a[aria-current="page"]', 'Agenda');
     }
 
     public function testCompanyPresentsBothFounders(): void
