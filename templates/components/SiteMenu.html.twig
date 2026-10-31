@@ -1,0 +1,23 @@
+{% set links = [
+    {route: 'app_home', label: 'Accueil'},
+    {route: 'app_company', label: 'Compagnie'},
+    {route: 'app_shows', label: 'Spectacles', also: ['app_show']},
+    {route: 'app_agenda', label: 'Agenda'},
+    {route: 'app_workshops', label: 'Ateliers'},
+    {route: 'app_contact', label: 'Contact'},
+] %}
+<div data-controller="menu"
+    data-action="keydown.esc@document->menu#close turbo:before-cache@document->menu#close"
+>
+    <a href="{{ path('app_home') }}" class="site-logo">
+        <img src="{{ asset('images/logo-fdp-small.webp') }}" alt="Fatale Destinée Production – accueil" width="256" height="256">
+    </a>
+    <button type="button" class="menu-button frame frame--thin" aria-expanded="false" aria-controls="site-menu"
+        data-menu-target="button" data-action="menu#toggle"
+    >Menu</button>
+    <nav id="site-menu" class="menu-panel" aria-label="Menu principal" hidden data-menu-target="panel">
+        {% for link in links %}
+            <a href="{{ path(link.route) }}"{% if app.current_route in [link.route]|merge(link.also ?? []) %} aria-current="page"{% endif %}>{{ link.label }}</a>
+        {% endfor %}
+    </nav>
+</div>

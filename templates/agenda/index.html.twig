@@ -3,11 +3,21 @@
 {% block title %}Agenda – {{ parent() }}{% endblock %}
 
 {% block body %}
-    <twig:PageHeader title="Agenda" />
+    <twig:PageTitle title="Agenda" />
 
-    <div class="page-body">
-        <section class="panel panel--center">
-            <p>Page en construction.</p>
-        </section>
-    </div>
+    {# Example rows showing the layout of sketch 7, until the dates come from the admin. #}
+    <ul class="agenda">
+        <li class="agenda-row">
+            <span class="agenda-row-date">12 déc. 2026</span>
+            <span class="agenda-row-show agenda-row-show--teddy">Qu'est-ce que je fous là ?</span>
+            <span class="agenda-row-place">Montpellier</span>
+            <span class="agenda-row-event">Exemple de festival</span>
+        </li>
+        <li class="agenda-row">
+            <span class="agenda-row-date">20 jan. 2027</span>
+            <span class="agenda-row-show agenda-row-show--angeline">Girouette Manigance</span>
+            <span class="agenda-row-place">Perpignan</span>
+            <span class="agenda-row-event">Exemple de saison culturelle</span>
+        </li>
+    </ul>
 {% endblock %}

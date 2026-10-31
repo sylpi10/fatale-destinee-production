@@ -1,0 +1,195 @@
+@use "variables" as *;
+
+// Inner pages: small logo top left, MENU button fixed top right, content in the middle.
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    > main {
+        flex: 1;
+    }
+}
+
+.site-logo {
+    position: absolute;
+    z-index: 10;
+    top: calc(#{$felt-inset} + 18px);
+    left: calc(#{$felt-inset} + 22px);
+    line-height: 0;
+
+    img {
+        width: clamp(72px, 9vw, 120px);
+    }
+
+    @media (max-width: $bp-mobile) {
+        top: 20px;
+        left: 20px;
+    }
+}
+
+.menu-button {
+    position: fixed;
+    z-index: 50;
+    top: calc(#{$felt-inset} + 22px);
+    right: calc(#{$felt-inset} + 22px);
+    padding: 6px 16px;
+    border: none;
+    background: $paper;
+    color: $ink;
+    font-family: $font-menu;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover,
+    &[aria-expanded="true"] {
+        color: $red;
+    }
+
+    @media (max-width: $bp-mobile) {
+        top: 22px;
+        right: 22px;
+    }
+}
+
+.menu-panel {
+    position: fixed;
+    z-index: 40;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(245, 242, 233, 0.97);
+
+    &[hidden] {
+        display: none;
+    }
+
+    a {
+        font-family: $font-menu;
+        font-weight: 700;
+        font-size: clamp(1.8rem, 5vh, 2.6rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: $ink;
+
+        &:hover,
+        &:focus-visible,
+        &[aria-current="page"] {
+            color: $red;
+        }
+    }
+}
+
+.page-content {
+    width: min(#{$content-width}, 100% - 2 * (#{$felt-inset} + 32px));
+    margin: 0 auto;
+    padding: 150px 0 80px;
+
+    @media (max-width: $bp-mobile) {
+        padding-top: 120px;
+    }
+}
+
+// Big page title with the red rule under it (sketches 7 and 8).
+.page-title {
+    margin: 0 0 48px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid $red;
+    text-align: center;
+
+    h1 {
+        margin: 0;
+        font-family: $font-title;
+        font-weight: 400;
+        font-size: clamp(3.2rem, 9vw, 6.5rem);
+        line-height: 0.95;
+        letter-spacing: 0.04em;
+    }
+
+    p {
+        margin: 4px 0 0;
+        font-family: $font-menu;
+        font-weight: 500;
+        font-size: 1.1rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: $red;
+    }
+}
+
+.section {
+    margin: 0 0 64px;
+}
+
+// Small framed heading, Oswald bold (ESPACE PRO, DISTRIBUTION…)
+.label {
+    display: inline-block;
+    margin: 0 0 20px;
+    font-family: $font-menu;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.placeholder {
+    display: grid;
+    place-items: center;
+    min-height: 220px;
+    padding: 24px;
+    color: $ink-soft;
+    font-style: italic;
+    text-align: center;
+    background: rgba(20, 20, 20, 0.04);
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 26px;
+    border: 2px solid $ink;
+    background: none;
+    color: $ink;
+    font-family: $font-menu;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+        color: $paper;
+        background: $ink;
+    }
+}
+
+.site-footer {
+    padding: 24px 24px calc(#{$felt-inset} + 28px);
+    text-align: center;
+    font-size: 0.95rem;
+    color: $ink-soft;
+
+    p {
+        margin: 0;
+    }
+}
+
+.label--spaced {
+    margin-top: 40px;
+}
+
+.login {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.error-page {
+    text-align: center;
+}

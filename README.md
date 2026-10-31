@@ -23,8 +23,9 @@ servis à la volée et les modifs n'apparaîtraient plus (supprimer `public/asse
 ## Front
 
 - Pages : `templates/<page>/index.html.twig`, layout dans `templates/base.html.twig`.
-- Composants Twig anonymes (`<twig:PageHeader />`…) : `templates/components/`.
-- Contrôleurs Stimulus : `assets/controllers/` (`site_header`, `lightbox`).
+- Composants Twig anonymes (`<twig:PageTitle />`, `<twig:SiteMenu />`, `<twig:FeltBorder />`…) : `templates/components/`.
+- Contrôleurs Stimulus : `assets/controllers/` (`menu`, `logo_sound`).
+- DA (brief client) : fond `#F5F2E9`, rouge `#A20505`, Oswald (menu), Lora (texte), Bebas Neue (titres), Caveat (accroches). Variables dans `assets/styles/_variables.scss`.
 - Formulaires : Symfony Form, thème commun dans `templates/form/site_theme.html.twig`.
 - Styles : `assets/styles/app.scss` et ses partials.
 

@@ -1,0 +1,51 @@
+@use "variables" as *;
+
+// Felt-pen look: the red line along the screen edges, and the frames drawn around
+// titles and blocks. The wobble comes from the #felt SVG filter (FeltBorder
+// component); it's applied to a pseudo-element so the text inside stays sharp.
+
+.felt-filters {
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.felt-border {
+    position: fixed;
+    inset: $felt-inset;
+    z-index: 30;
+    pointer-events: none;
+    border: 5px solid $red;
+    border-radius: 6px;
+    opacity: 0.9;
+    filter: url(#felt);
+
+    @media (max-width: $bp-mobile) {
+        inset: 8px;
+        border-width: 4px;
+    }
+}
+
+.frame {
+    position: relative;
+    padding: 0.5em 0.9em;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border: 3px solid $red;
+        border-radius: 3px;
+        filter: url(#felt);
+    }
+
+    &--ink::before {
+        border-color: $ink;
+    }
+
+    &--thin::before {
+        border-width: 1.5px;
+        border-color: $ink;
+    }
+}

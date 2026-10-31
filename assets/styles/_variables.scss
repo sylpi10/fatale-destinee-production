@@ -1,24 +1,18 @@
-$bg-page: #eeeeee;
-$bg-container: #fff;
-$spacing: 20px;
-$main-color: #0c1423;
+// Values from the client brief (Fatale destinée.pdf).
 
-// Public site
-$site-bg: #070708;
-$site-text: #e9e6df;
-$site-link: #d8d4cb;
-$gold: #e9b949;
-$gold-light: #f6d36b;
-$gold-dark: #c8902a;
-$gold-text: #f1cf73;
-$font-display: "Cinzel", serif;
-$font-decorative: "Cinzel Decorative", serif;
-$font-body: "Cormorant Garamond", Georgia, serif;
-$bp-nav: 960px;
-$bp-mobile: 600px;
-
-// Home page (brief)
 $paper: #f5f2e9;
 $ink: #141414;
-$stamp-red: #b3100d;
+$ink-soft: #4a4744;
+$red: #a20505; // logo and felt border
+$red-show-teddy: $red; // agenda: "rouge vif"
+$red-show-angeline: #7a0a1e; // agenda: "rouge bordeaux vif", to confirm
+
 $font-menu: "Oswald", "Arial Narrow", sans-serif;
+$font-text: "Lora", Georgia, serif;
+$font-title: "Bebas Neue", "Oswald", sans-serif;
+$font-hand: "Caveat", cursive;
+
+$felt-inset: 14px;
+$content-width: 1080px;
+$bp-nav: 960px;
+$bp-mobile: 600px;

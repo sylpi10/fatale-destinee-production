@@ -11,12 +11,10 @@
 {% block title %}{{ message.title }} – {{ parent() }}{% endblock %}
 
 {% block body %}
-    <twig:PageHeader :title="status_code" :subtitle="message.title" />
+    <twig:PageTitle :title="status_code" :subtitle="message.title" />
 
-    <div class="page-body">
-        <section class="panel panel--center">
-            <p>{{ message.description }}</p>
-            <a href="{{ path('app_home') }}" class="gold-button">Retour à l'accueil</a>
-        </section>
-    </div>
+    <section class="section error-page">
+        <p>{{ message.description }}</p>
+        <a href="{{ path('app_home') }}" class="button">Retour à l'accueil</a>
+    </section>
 {% endblock %}

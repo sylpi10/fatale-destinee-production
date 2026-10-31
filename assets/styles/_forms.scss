@@ -1,0 +1,58 @@
+@use "variables" as *;
+
+.site-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    label {
+        font-family: $font-menu;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+    }
+
+    input:not([type="checkbox"]),
+    textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.7rem 0.8rem;
+        border: 1.5px solid $ink;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.5);
+        color: $ink;
+        font: inherit;
+
+        &:focus {
+            outline: none;
+            border-color: $red;
+            box-shadow: 0 0 0 2px rgba(162, 5, 5, 0.15);
+        }
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .button {
+        align-self: flex-start;
+    }
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-error {
+    margin: 0;
+    color: $red;
+    font-size: 0.95rem;
+}
+
+.honeypot {
+    position: absolute;
+    left: -10000px;
+}

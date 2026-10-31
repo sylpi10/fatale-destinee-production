@@ -3,11 +3,19 @@
 {% block title %}Spectacles – {{ parent() }}{% endblock %}
 
 {% block body %}
-    <twig:PageHeader title="Spectacles" />
+    <twig:PageTitle title="Spectacles" />
 
-    <div class="page-body">
-        <section class="panel panel--center">
-            <p>Page en construction.</p>
-        </section>
+    <div class="shows">
+        <a class="show-card" href="{{ path('app_show', {slug: 'qu-est-ce-que-je-fous-la'}) }}">
+            <img src="{{ asset('images/spectacles/qu-est-ce-que-je-fous-la.webp') }}" alt="" width="1600" height="1200">
+            <h2>Qu'est-ce que je fous là ?</h2>
+            <p>Teddy Moulin · Clown · Création 2026</p>
+        </a>
+        {# Angéline's show: content to come. #}
+        <div class="show-card">
+            <img src="{{ asset('images/spectacles/angeline-solo.webp') }}" alt="" width="1600" height="1200">
+            <h2>Girouette Manigance</h2>
+            <p>Angéline Delourme · Page à venir</p>
+        </div>
     </div>
 {% endblock %}

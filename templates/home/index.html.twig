@@ -9,15 +9,6 @@
 
 {% block layout %}
     <div class="home">
-        {# Felt-pen red line along the screen edges, like around the logo. #}
-        <div class="home-felt" aria-hidden="true"></div>
-        <svg class="home-filters" aria-hidden="true">
-            <filter id="felt">
-                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="7"/>
-                <feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/>
-            </filter>
-        </svg>
-
         {# Placeholders until the photos of the two actors in black kimonos, back to back. #}
         <twig:KimonoSilhouette class="home-figure home-figure--left" hair="topknot" />
         <twig:KimonoSilhouette class="home-figure home-figure--right" hair="bun" mirrored />

@@ -1,48 +1,6 @@
-@use "variables" as *;
-@use "nav" as *;
-@use "header" as *;
-@use "panel" as *;
-@use "gallery" as *;
-@use "form" as *;
-@use "contact" as *;
-@use "footer" as *;
+@use "base";
+@use "felt";
+@use "layout";
+@use "forms";
+@use "pages";
 @use "home";
-@use "site";
-
-body {
-    background-color: $bg-page;
-    padding: 0;
-    margin: 0;
-    .container {
-        background-color: $bg-container;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: $spacing 40px;
-        width: fit-content;
-        margin: $spacing auto;
-        border-radius: 8px;
-        width: min(748px, 80%);
-        p {
-            font-size: 1.3rem;
-        }
-    }
-
-    .flash {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: fit-content;
-        padding: $spacing;
-        display: flex;
-        align-items: center;
-        margin: 0;
-        font-weight: bold;
-        &.flash-success {
-            background-color: #d4edda;
-            color: green;
-        }
-        &.flash-error {
-            background-color: #f8d7da;
-            color: red;
-        }
-    }
-}

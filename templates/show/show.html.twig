@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Qu'est-ce que je fous là ? – {{ parent() }}{% endblock %}
+
+{% block body %}
+    {# Sketch 5: photo, back to the list, title, genre and key facts. #}
+    <div class="show-banner">
+        <img src="{{ asset('images/spectacles/qu-est-ce-que-je-fous-la.webp') }}" alt="" width="1600" height="1200">
+        <a class="signpost" href="{{ path('app_shows') }}">Spectacles</a>
+    </div>
+
+    <h1 class="show-title frame">Qu'est-ce que je fous là ?</h1>
+    <div><span class="show-genre frame frame--thin">Clown</span></div>
+    <ul class="show-facts">
+        <li class="frame frame--thin">Création 2026</li>
+        <li class="frame frame--thin">À partir de 8 ans</li>
+        <li class="frame frame--thin">EXT / INT</li>
+        <li class="frame frame--thin">55 min</li>
+    </ul>
+
+    {# Sketch 5': catchphrase and teaser on the left, synopsis on the right. #}
+    <div class="section show-columns">
+        <div>
+            <p class="catchphrase">Moroze cherche sa place. Jean-Michel Bonheur a réponse à tout.</p>
+            <div class="placeholder frame">Teaser vidéo à venir</div>
+        </div>
+        <div>
+            <h2 class="sr-only">Synopsis</h2>
+            <p>Entre crises existentielles, rêves d’écureuils mignons et vérités douteuses, une question demeure : et si le problème, c’était simplement d’être là ?</p>
+            <p>Un solo plus ou moins autobiographique, bien que fictionnel, à plusieurs, et vaguement inspiré de faits qui n'ont probablement jamais eu lieu.</p>
+        </div>
+    </div>
+
+    {# Sketch 5'': documents for programmers, credits, past dates, photos, partners. #}
+    <div class="section show-columns">
+        <div>
+            <h2 class="label frame frame--ink">Espace pro</h2>
+            <ul class="pro-links">
+                <li><span>Dossier de diffusion</span></li>
+                <li><span>Fiche technique</span></li>
+                <li><span>Fiche technique gradins</span></li>
+                <li><span>Photos communication</span></li>
+            </ul>
+
+            <h2 class="label frame frame--ink label--spaced">Distribution</h2>
+            <dl class="credits">
+                <dt>De et avec</dt><dd>Teddy Moulin</dd>
+                <dt>Soutiens et coproduction</dt><dd>À compléter</dd>
+                <dt>Regards extérieurs</dt><dd>À compléter</dd>
+                <dt>Technique son / plateau</dt><dd>À compléter</dd>
+                <dt>Production</dt><dd>Fatale Destinée Production</dd>
+            </dl>
+        </div>
+        <div>
+            <h2 class="label frame frame--ink">Quelques dates jouées</h2>
+            <p class="placeholder">Dates à venir</p>
+            <div class="placeholder frame">Carrousel des photos du spectacle à venir</div>
+        </div>
+    </div>
+
+    <section class="section">
+        <h2 class="sr-only">Partenaires</h2>
+        <ul class="partners">
+            {% for i in 1..6 %}<li>Logo</li>{% endfor %}
+        </ul>
+    </section>
+{% endblock %}
