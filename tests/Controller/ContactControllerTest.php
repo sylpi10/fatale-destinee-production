@@ -4,25 +4,24 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use Nytodev\InertiaBundle\Testing\AssertableInertiaPage;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Mime\Email;
 
 final class ContactControllerTest extends WebTestCase
 {
-    private const array VALID_PAYLOAD = [
-        'name' => 'Jeanne Dupont',
-        'email' => 'jeanne@example.com',
-        'subject' => 'Inscription',
-        'message' => 'Bonjour, je souhaite m\'inscrire au groupe du mardi.',
-        'website' => '',
+    private const array VALID_DATA = [
+        'contact[name]' => 'Jeanne Dupont',
+        'contact[email]' => 'jeanne@example.com',
+        'contact[subject]' => 'Inscription',
+        'contact[message]' => 'Bonjour, je souhaite m\'inscrire au groupe du mardi.',
+        'contact[website]' => '',
     ];
 
     public function testValidMessageIsEmailedToTheCompany(): void
     {
         $client = static::createClient();
-        $this->post($client, self::VALID_PAYLOAD);
+        $this->submit($client, self::VALID_DATA);
 
         self::assertResponseRedirects('/contact', 303);
         self::assertEmailCount(1);
@@ -34,53 +33,37 @@ final class ContactControllerTest extends WebTestCase
         self::assertSame('jeanne@example.com', $email->getReplyTo()[0]->getAddress());
         self::assertEmailTextBodyContains($email, 'groupe du mardi');
 
-        $client->request('GET', '/contact', server: ['HTTP_X_INERTIA' => 'true']);
-        // Flash data sits at the page level, next to props: AssertableInertiaPage only reads props.
-        $page = json_decode((string) $client->getResponse()->getContent(), true, flags: \JSON_THROW_ON_ERROR);
-        self::assertSame('Merci, votre message a bien été envoyé !', $page['flash']['success'] ?? null);
+        $client->followRedirect();
+        self::assertSelectorTextSame('.flash-success', 'Merci, votre message a bien été envoyé !');
     }
 
-    public function testInvalidMessageRedirectsBackWithErrors(): void
+    public function testInvalidMessageIsRenderedBackWithErrors(): void
     {
         $client = static::createClient();
-        $this->post($client, ['email' => 'not-an-email'] + self::VALID_PAYLOAD);
+        $this->submit($client, ['contact[email]' => 'not-an-email'] + self::VALID_DATA);
 
-        self::assertResponseRedirects('/contact', 303);
+        // 422 so Turbo renders the form again instead of ignoring the response.
+        self::assertResponseStatusCodeSame(422);
         self::assertEmailCount(0);
-
-        $client->request('GET', '/contact', server: ['HTTP_X_INERTIA' => 'true']);
-        AssertableInertiaPage::fromResponse($client->getResponse())
-            ->where('errors.email', 'Cette adresse e-mail n\'est pas valide.');
+        self::assertSelectorTextSame('.form-error', 'Cette adresse e-mail n\'est pas valide.');
+        self::assertInputValueSame('contact[name]', 'Jeanne Dupont');
     }
 
     public function testHoneypotSilentlyDropsTheMessage(): void
     {
         $client = static::createClient();
-        $this->post($client, ['website' => 'https://spam.example'] + self::VALID_PAYLOAD);
+        $this->submit($client, ['contact[website]' => 'https://spam.example'] + self::VALID_DATA);
 
         self::assertResponseRedirects('/contact', 303);
         self::assertEmailCount(0);
     }
 
     /**
-     * @param array<string, string> $payload
+     * @param array<string, string> $data
      */
-    private function post(KernelBrowser $client, array $payload): void
+    private function submit(KernelBrowser $client, array $data): void
     {
-        // Same flow as the browser: the GET sets the XSRF cookie, the POST echoes it in a header.
         $client->request('GET', '/contact');
-        $token = $client->getCookieJar()->get('XSRF-TOKEN')?->getValue();
-
-        $client->request(
-            'POST',
-            '/contact',
-            server: [
-                'CONTENT_TYPE' => 'application/json',
-                'HTTP_X_INERTIA' => 'true',
-                'HTTP_X_XSRF_TOKEN' => (string) $token,
-                'HTTP_REFERER' => 'http://localhost/contact',
-            ],
-            content: json_encode($payload, \JSON_THROW_ON_ERROR),
-        );
+        $client->submitForm('Envoyer', $data);
     }
 }

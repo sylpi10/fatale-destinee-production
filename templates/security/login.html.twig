@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion – {{ parent() }}{% endblock %}
+
+{% block body %}
+    <twig:PageHeader title="Connexion" />
+
+    <div class="page-body page-body--narrow">
+        <form method="post" action="{{ path('app_login') }}" class="panel site-form">
+            {% if error %}
+                <p class="form-error">{{ error.messageKey|replace(error.messageData) }}</p>
+            {% endif %}
+
+            <div class="input-wrapper">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="{{ last_username }}" autocomplete="email" required autofocus>
+            </div>
+            <div class="input-wrapper">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+            </div>
+            <label>
+                <input type="checkbox" name="remember"> Rester connecté
+            </label>
+
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="gold-button">Se connecter</button>
+        </form>
+    </div>
+{% endblock %}

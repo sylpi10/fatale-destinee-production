@@ -47,27 +47,6 @@
             "migrations/.gitignore"
         ]
     },
-    "nytodev/inertia-bundle": {
-        "version": "3.1",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "3.0",
-            "ref": "dd21b7ae89da2606f2d4686057033ddb89f6b237"
-        },
-        "files": [
-            "config/packages/inertia.yaml"
-        ]
-    },
-    "pentatrion/vite-bundle": {
-        "version": "8.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "6.5",
-            "ref": "3a6673f248f8fc1dd364dadfef4c5b381d1efab6"
-        }
-    },
     "phpunit/phpunit": {
         "version": "13.3",
         "recipe": {
@@ -93,6 +72,21 @@
         },
         "files": [
             "public/.htaccess"
+        ]
+    },
+    "symfony/asset-mapper": {
+        "version": "8.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.4",
+            "ref": "c01c47af2ec66a74ec046eccb919cfe27d3464ec"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/styles/app.css",
+            "config/packages/asset_mapper.yaml",
+            "importmap.php"
         ]
     },
     "symfony/console": {
@@ -130,6 +124,18 @@
         "files": [
             ".env",
             ".env.dev"
+        ]
+    },
+    "symfony/form": {
+        "version": "8.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.2",
+            "ref": "7d86a6723f4a623f59e2bf966b6aad2fc461d36b"
+        },
+        "files": [
+            "config/packages/csrf.yaml"
         ]
     },
     "symfony/framework-bundle": {
@@ -225,6 +231,21 @@
             "config/routes/security.yaml"
         ]
     },
+    "symfony/stimulus-bundle": {
+        "version": "3.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.3",
+            "ref": "7ce779ee74ea8d8aae6afed73e8438af5a392b30"
+        },
+        "files": [
+            "assets/controllers.json",
+            "assets/controllers/csrf_protection_controller.js",
+            "assets/controllers/hello_controller.js",
+            "assets/stimulus_bootstrap.js"
+        ]
+    },
     "symfony/twig-bundle": {
         "version": "8.1",
         "recipe": {
@@ -236,6 +257,30 @@
         "files": [
             "config/packages/twig.yaml",
             "templates/base.html.twig"
+        ]
+    },
+    "symfony/ux-turbo": {
+        "version": "3.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.20",
+            "ref": "eaff62fc37864d355804c778309a226ae539831f"
+        },
+        "files": [
+            "config/packages/ux_turbo.yaml"
+        ]
+    },
+    "symfony/ux-twig-component": {
+        "version": "3.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.13",
+            "ref": "f367ae2a1faf01c503de2171f1ec22567febeead"
+        },
+        "files": [
+            "config/packages/twig_component.yaml"
         ]
     },
     "symfony/validator": {
@@ -263,20 +308,18 @@
             "config/routes/web_profiler.yaml"
         ]
     },
-    "symfonycasts/reset-password-bundle": {
-        "version": "1.25",
+    "symfonycasts/sass-bundle": {
+        "version": "0.10",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
-            "version": "1.0",
-            "ref": "97c1627c0384534997ae1047b93be517ca16de43"
+            "version": "0.6",
+            "ref": "89c0e817b8256281c0a3623781525aec583ca3f4"
         },
         "files": [
-            "config/packages/reset_password.yaml"
+            "config/packages/symfonycasts_sass.yaml",
+            "assets/styles/app.scss"
         ]
-    },
-    "symfonycasts/verify-email-bundle": {
-        "version": "v1.18.0"
     },
     "twig/extra-bundle": {
         "version": "v3.29.0"

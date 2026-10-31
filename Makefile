@@ -1,4 +1,4 @@
-.PHONY: help build deploy deploy-test remote
+.PHONY: help deploy deploy-test remote
 
 # Variables de déploiement (non versionnées) : SERVER_USER, SERVER_HOST, APP_PATH
 ifneq (,$(wildcard .env.deploy))
@@ -27,9 +27,10 @@ RSYNC_EXCLUDES = \
 	--exclude=/.git/ \
 	--exclude=/.idea/ \
 	--exclude=/.zed/ \
-	--exclude=/node_modules/ \
 	--exclude=/vendor/ \
 	--exclude=/var/ \
+	--exclude=/assets/vendor/ \
+	--exclude=/public/assets/ \
 	--exclude=/tests/ \
 	--exclude=/.env.local \
 	--exclude=/.env.*.local \
@@ -39,19 +40,14 @@ RSYNC_EXCLUDES = \
 	--exclude=/phpunit.xml
 
 help:
-	@echo "make build        build Vite client + SSR (public/build, bootstrap/ssr)"
-	@echo "make deploy-test  build + rsync --dry-run : affiche ce qui partirait"
-	@echo "make deploy       build + rsync + composer install + cache + migrations"
+	@echo "make deploy-test  rsync --dry-run : affiche ce qui partirait"
+	@echo "make deploy       rsync + composer install + assets + cache + migrations"
 
-build:
-	npm ci
-	npm run build
-
-deploy-test: build
+deploy-test:
 	rsync -av --itemize-changes --dry-run --delete $(RSYNC_EXCLUDES) \
 		./ $(SERVER_USER)@$(SERVER_HOST):~/$(APP_PATH)
 
-deploy: build
+deploy:
 	rsync -av --itemize-changes --delete $(RSYNC_EXCLUDES) \
 		./ $(SERVER_USER)@$(SERVER_HOST):~/$(APP_PATH)
 	$(MAKE) remote
@@ -64,5 +60,5 @@ ifeq ($(MIGRATE),1)
 	$(SSH) '$(CONSOLE) doctrine:migrations:migrate --allow-no-migration'
 endif
 	$(SSH) '$(CONSOLE) cache:clear'
-	# redémarre l'app Node SSR (Passenger) si elle est configurée dans cPanel
-	$(SSH) 'mkdir -p ~/$(APP_PATH)/tmp && touch ~/$(APP_PATH)/tmp/restart.txt'
+	# assets compilés sur le serveur : vendors JS, Sass, puis copie versionnée dans public/assets
+	$(SSH) '$(CONSOLE) importmap:install && $(CONSOLE) sass:build && $(CONSOLE) asset-map:compile'

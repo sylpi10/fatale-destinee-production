@@ -1,39 +1,43 @@
 # Fatale Destinée Production
 
-Symfony 8 + React 19 (TypeScript) via Inertia.js, Vite, Sass.
+Symfony 8 + Twig, Symfony UX (Stimulus, Turbo, TwigComponent), AssetMapper, Sass. Pas de Node.
 
 ## Installation
 
 ```bash
 composer install
-npm install
+php bin/console importmap:install
+php bin/console doctrine:migrations:migrate
 ```
 
 ## Lancer en dev
 
 ```bash
-symfony serve -d   # serveur PHP → http://127.0.0.1:8000
-npm run dev        # Vite : JS + Sass compilés à la volée, rechargement auto
+symfony serve -d                       # http://127.0.0.1:8000
+symfony console sass:build --watch     # recompile assets/styles/app.scss à chaque modif
 ```
 
-Si les modifs n'apparaissent plus en live après un `npm run build` / `make deploy` : relancer `npm run dev`.
+Ne pas lancer `asset-map:compile` en local : `public/assets/` prendrait le pas sur les fichiers
+servis à la volée et les modifs n'apparaîtraient plus (supprimer `public/assets/` si c'est arrivé).
 
-## Lancer en SSR
+## Front
+
+- Pages : `templates/<page>/index.html.twig`, layout dans `templates/base.html.twig`.
+- Composants Twig anonymes (`<twig:PageHeader />`…) : `templates/components/`.
+- Contrôleurs Stimulus : `assets/controllers/` (`site_header`, `lightbox`).
+- Formulaires : Symfony Form, thème commun dans `templates/form/site_theme.html.twig`.
+- Styles : `assets/styles/app.scss` et ses partials.
+
+## Tests
 
 ```bash
-# .env.local : INERTIA_SSR=1
-symfony console cache:clear   # obligatoire après avoir changé INERTIA_SSR
-npm run build:ssr             # bundle Node → bootstrap/ssr/ssr.js
-symfony console inertia:start-ssr
+php bin/console doctrine:migrations:migrate --env=test   # une fois, base SQLite de test
+php bin/phpunit
 ```
 
-Après chaque modif front : refaire `npm run build:ssr` et relancer `inertia:start-ssr`.
-
-## Sass
-
-Pas de watcher à part : Vite compile `assets/styles/app.scss` (et ses partials).
+## Déploiement
 
 ```bash
-npm run dev     # watch + hot reload
-npm run build   # compilation prod → public/build (+ bundle SSR)
+make deploy-test   # rsync --dry-run
+make deploy        # rsync + composer install + migrations + cache + assets
 ```

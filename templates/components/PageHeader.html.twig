@@ -1,0 +1,12 @@
+{# Stormy banner on top of the pages. #}
+{% props title, subtitle = null %}
+<div class="page-header">
+    <h1 class="gold-title">{{ title }}</h1>
+    {% if subtitle %}
+        <div class="ornament">
+            <span class="ornament-line"></span>
+            <span class="ornament-text">{{ subtitle }}</span>
+            <span class="ornament-line ornament-line--right"></span>
+        </div>
+    {% endif %}
+</div>

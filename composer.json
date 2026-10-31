@@ -1,6 +1,6 @@
 {
-    "name": "sylpi10/symfony-inertia-react",
-    "description": "Symfony starter with React + TypeScript via Inertia.js, with SSR",
+    "name": "sylpi10/fatale-destinee",
+    "description": "Site Fatale Destinée Production: Symfony, Twig, Symfony UX",
     "type": "project",
     "license": "MIT",
     "minimum-stability": "stable",
@@ -12,14 +12,15 @@
         "doctrine/doctrine-bundle": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.7",
-        "nytodev/inertia-bundle": "^3.1",
-        "pentatrion/vite-bundle": "^8.2",
         "phpdocumentor/reflection-docblock": "^6.0",
         "phpstan/phpdoc-parser": "^2.3",
         "symfony/apache-pack": "^1.0",
+        "symfony/asset": "8.1.*",
+        "symfony/asset-mapper": "8.1.*",
         "symfony/console": "8.1.*",
         "symfony/dotenv": "8.1.*",
         "symfony/flex": "^2",
+        "symfony/form": "8.1.*",
         "symfony/framework-bundle": "8.1.*",
         "symfony/http-client": "8.1.*",
         "symfony/mailer": "8.1.*",
@@ -30,11 +31,13 @@
         "symfony/runtime": "8.1.*",
         "symfony/security-bundle": "8.1.*",
         "symfony/serializer": "8.1.*",
+        "symfony/stimulus-bundle": "^3.6",
         "symfony/twig-bundle": "8.1.*",
+        "symfony/ux-turbo": "^3.6",
+        "symfony/ux-twig-component": "^3.6",
         "symfony/validator": "8.1.*",
         "symfony/yaml": "8.1.*",
-        "symfonycasts/reset-password-bundle": "^1.25",
-        "symfonycasts/verify-email-bundle": "^1.18",
+        "symfonycasts/sass-bundle": "^0.10.0",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.30"
     },
@@ -72,15 +75,15 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ],
-        "types": "@php bin/console app:typescript:generate"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -94,7 +97,6 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.3",
         "phpunit/phpunit": "^13.3.6",
-        "spatie/typescript-transformer": "^3.3",
         "symfony/browser-kit": "8.1.*",
         "symfony/css-selector": "8.1.*",
         "symfony/debug-bundle": "8.1.*",

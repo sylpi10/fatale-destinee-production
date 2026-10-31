@@ -154,7 +154,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         cookie_name?: scalar|Param|null, // The name of the cookie to use when using stateless protection. // Default: "csrf-token"
  *     },
  *     form?: bool|array{ // Form configuration
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *         csrf_protection?: bool|array{
  *             enabled?: scalar|Param|null, // Default: null
  *             token_id?: scalar|Param|null, // Default: null
@@ -286,7 +286,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         }>,
  *     },
  *     asset_mapper?: bool|array{ // Asset Mapper configuration
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *         paths?: Param|string|array<string, scalar|Param|null>,
  *         excluded_patterns?: list<scalar|Param|null>,
  *         exclude_dotfiles?: bool|Param, // If true, any files starting with "." will be excluded from the asset mapper. // Default: true
@@ -739,7 +739,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         enabled?: bool|Param, // Default: false
  *     },
  *     html?: bool|array{
- *         enabled?: bool|Param, // Default: false
+ *         enabled?: bool|Param, // Default: true
  *     },
  *     markdown?: bool|array{
  *         enabled?: bool|Param, // Default: false
@@ -779,53 +779,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             unordered_list_markers?: list<scalar|Param|null>,
  *         },
  *         ...<string, mixed>
- *     },
- * }
- * @psalm-type PentatrionViteConfig = array{
- *     public_directory?: scalar|Param|null, // Default: "public"
- *     build_directory?: scalar|Param|null, // we only need build_directory to locate entrypoints.json file, it's the "base" vite config parameter without slashes. // Default: "build"
- *     proxy_origin?: scalar|Param|null, // Allows to use different origin for asset proxy, eg. http://host.docker.internal:5173 // Default: null
- *     absolute_url?: bool|Param, // Prepend the rendered link and script tags with an absolute URL. // Default: false
- *     throw_on_missing_entry?: scalar|Param|null, // Throw exception when entry is not present in the entrypoints file // Default: false
- *     throw_on_missing_asset?: scalar|Param|null, // Throw exception when asset is not present in the manifest file // Default: true
- *     cache?: bool|Param, // Enable caching of the entry point file(s) // Default: false
- *     preload?: "none"|"link-tag"|"link-header"|Param, // preload all rendered script and link tags automatically via the http2 Link header. (symfony/web-link is required) Instead <link rel="modulepreload"> will be used. // Default: "link-tag"
- *     crossorigin?: false|true|"anonymous"|"use-credentials"|Param, // crossorigin value, can be false, true (default), anonymous (same as true) or use-credentials // Default: true
- *     script_attributes?: list<scalar|Param|null>,
- *     link_attributes?: list<scalar|Param|null>,
- *     preload_attributes?: list<scalar|Param|null>,
- *     default_build?: scalar|Param|null, // Deprecated: The "default_build" option is deprecated. Use "default_config" instead. // Default: null
- *     builds?: array<string, array{ // Default: []
- *         build_directory?: scalar|Param|null, // Default: "build"
- *         script_attributes?: list<scalar|Param|null>,
- *         link_attributes?: list<scalar|Param|null>,
- *         preload_attributes?: list<scalar|Param|null>,
- *     }>,
- *     default_config?: scalar|Param|null, // Default: null
- *     configs?: array<string, array{ // Default: []
- *         build_directory?: scalar|Param|null, // Default: "build"
- *         script_attributes?: list<scalar|Param|null>,
- *         link_attributes?: list<scalar|Param|null>,
- *         preload_attributes?: list<scalar|Param|null>,
- *     }>,
- * }
- * @psalm-type InertiaConfig = array{
- *     root_view?: scalar|Param|null, // The root Twig template used to render the full HTML page on first visit. // Default: "base.html.twig"
- *     version?: scalar|Param|null, // Asset version string. When it changes, Inertia triggers a full page reload. Set to null to disable. // Default: null
- *     intercept_validation_errors?: bool|Param, // When true, ValidationFailedException (MapRequestPayload/MapQueryString or manual throw) on Inertia requests is converted into the error flow: errors in session + 303 redirect back. Set to false to keep Symfony's default 4xx behavior. // Default: true
- *     encrypt_history?: bool|Param, // Globally enable browser history encryption for all Inertia responses. Can be overridden per-render via Inertia::encryptHistory(). // Default: false
- *     expose_shared_prop_keys?: bool|Param, // When true, the page object includes a sharedProps field listing keys coming from Inertia::share(). Allows the client to distinguish shared from page-specific props. // Default: true
- *     ssr_enabled?: bool|Param, // Enable Server-Side Rendering via an external Node.js SSR server. // Default: false
- *     ssr_url?: scalar|Param|null, // URL of the SSR server (used only when ssr_enabled is true). // Default: "http://127.0.0.1:13714"
- *     ssr_bundle?: scalar|Param|null, // Path to the SSR bundle JS file. If null, auto-detected from common paths (bootstrap/ssr/ssr.mjs, public/build/ssr/ssr.mjs). // Default: null
- *     ssr_throw_on_error?: bool|Param, // When true, SSR rendering failures throw a SsrException instead of silently falling back to client-side rendering. Useful for E2E tests. // Default: false
- *     pages?: array{ // Component file validation settings.
- *         ensure_pages_exist?: bool|Param, // When true, Inertia::render() will throw if the component file does not exist on disk. Requires pages.paths to be configured. // Default: false
- *         paths?: list<scalar|Param|null>,
- *         extensions?: list<scalar|Param|null>,
- *     },
- *     testing?: array{ // Settings for test assertions (AssertableInertiaPage).
- *         ensure_pages_exist?: bool|Param, // When true, AssertableInertiaPage::component() validates the file exists on disk. Uses pages.paths and pages.extensions. // Default: true
  *     },
  * }
  * @psalm-type WebProfilerConfig = array{
@@ -1521,14 +1474,49 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     }>,
  *     role_hierarchy?: array<string, Param|string|list<scalar|Param|null>>,
  * }
- * @psalm-type SymfonycastsResetPasswordConfig = array{
- *     request_password_repository?: scalar|Param|null, // A class that implements ResetPasswordRequestRepositoryInterface - usually your ResetPasswordRequestRepository.
- *     lifetime?: int|Param, // The length of time in seconds that a password reset request is valid for after it is created. // Default: 3600
- *     throttle_limit?: int|Param, // Another password reset cannot be made faster than this throttle time in seconds. // Default: 3600
- *     enable_garbage_collection?: bool|Param, // Enable/Disable automatic garbage collection. // Default: true
+ * @psalm-type StimulusConfig = array{
+ *     controller_paths?: list<scalar|Param|null>,
+ *     controllers_json?: scalar|Param|null, // Default: "%kernel.project_dir%/assets/controllers.json"
  * }
- * @psalm-type SymfonycastsVerifyEmailConfig = array{
- *     lifetime?: int|Param, // The length of time in seconds that a signed URI is valid for after it is created. // Default: 3600
+ * @psalm-type TurboConfig = array{
+ *     broadcast?: bool|array{
+ *         enabled?: bool|Param, // Default: true
+ *         entity_template_prefixes?: list<scalar|Param|null>,
+ *         doctrine_orm?: bool|array{ // Enable the Doctrine ORM integration
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *     },
+ *     default_transport?: scalar|Param|null, // Default: "default"
+ * }
+ * @psalm-type TwigComponentConfig = array{
+ *     defaults?: array<string, Param|string|array{ // Default: []
+ *         template_directory?: scalar|Param|null, // Default: "components"
+ *         name_prefix?: scalar|Param|null, // Default: ""
+ *     }>,
+ *     anonymous_template_directory?: scalar|Param|null, // Defaults to `components`
+ *     profiler?: bool|array{ // Enables the profiler for Twig Component
+ *         enabled?: bool|Param, // Default: "%kernel.debug%"
+ *         collect_components?: bool|Param, // Collect components instances // Default: true
+ *     },
+ * }
+ * @psalm-type SymfonycastsSassConfig = array{
+ *     root_sass?: list<scalar|Param|null>,
+ *     binary?: scalar|Param|null, // The Sass binary to use // Default: null
+ *     search_for_binary?: scalar|Param|null, // Whether to search for the Sass binary in the system PATH // Default: true
+ *     sass_options?: array{
+ *         style?: "compressed"|"expanded"|Param, // The style of the generated CSS: compressed or expanded. // Default: "expanded"
+ *         charset?: bool|Param, // Whether to include the charset declaration in the generated Sass.
+ *         error_css?: bool|Param, // Emit a CSS file when an error occurs.
+ *         source_map?: bool|Param, // Whether to generate source maps. // Default: true
+ *         embed_sources?: bool|Param, // Embed source file contents in source maps.
+ *         embed_source_map?: bool|Param, // Embed source map contents in CSS. // Default: "%kernel.debug%"
+ *         load_path?: list<scalar|Param|null>,
+ *         quiet?: bool|Param, // Don't print warnings.
+ *         quiet_deps?: bool|Param, // Don't print compiler warnings from dependencies.
+ *         stop_on_error?: bool|Param, // Don't compile more files once an error is encountered.
+ *         trace?: bool|Param, // Print full Dart stack traces for exceptions.
+ *     },
+ *     embed_sourcemap?: bool|Param|null, // Deprecated: Option "embed_sourcemap" at "symfonycasts_sass.embed_sourcemap" is deprecated. Use "sass_options.embed_source_map" instead". // Default: null
  * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
@@ -1537,14 +1525,14 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     framework?: FrameworkConfig,
  *     twig?: TwigConfig,
  *     twig_extra?: TwigExtraConfig,
- *     pentatrion_vite?: PentatrionViteConfig,
- *     inertia?: InertiaConfig,
  *     monolog?: MonologConfig,
  *     doctrine?: DoctrineConfig,
  *     doctrine_migrations?: DoctrineMigrationsConfig,
  *     security?: SecurityConfig,
- *     symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
- *     symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *     stimulus?: StimulusConfig,
+ *     turbo?: TurboConfig,
+ *     twig_component?: TwigComponentConfig,
+ *     symfonycasts_sass?: SymfonycastsSassConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1552,8 +1540,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         framework?: FrameworkConfig,
  *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
- *         pentatrion_vite?: PentatrionViteConfig,
- *         inertia?: InertiaConfig,
  *         web_profiler?: WebProfilerConfig,
  *         monolog?: MonologConfig,
  *         debug?: DebugConfig,
@@ -1561,8 +1547,10 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         security?: SecurityConfig,
- *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
- *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         stimulus?: StimulusConfig,
+ *         turbo?: TurboConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         symfonycasts_sass?: SymfonycastsSassConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1571,14 +1559,14 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         framework?: FrameworkConfig,
  *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
- *         pentatrion_vite?: PentatrionViteConfig,
- *         inertia?: InertiaConfig,
  *         monolog?: MonologConfig,
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         security?: SecurityConfig,
- *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
- *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         stimulus?: StimulusConfig,
+ *         turbo?: TurboConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         symfonycasts_sass?: SymfonycastsSassConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1587,15 +1575,15 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         framework?: FrameworkConfig,
  *         twig?: TwigConfig,
  *         twig_extra?: TwigExtraConfig,
- *         pentatrion_vite?: PentatrionViteConfig,
- *         inertia?: InertiaConfig,
  *         web_profiler?: WebProfilerConfig,
  *         monolog?: MonologConfig,
  *         doctrine?: DoctrineConfig,
  *         doctrine_migrations?: DoctrineMigrationsConfig,
  *         security?: SecurityConfig,
- *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
- *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
+ *         stimulus?: StimulusConfig,
+ *         turbo?: TurboConfig,
+ *         twig_component?: TwigComponentConfig,
+ *         symfonycasts_sass?: SymfonycastsSassConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

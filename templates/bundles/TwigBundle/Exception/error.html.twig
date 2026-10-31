@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% set messages = {
+    403: {title: 'Accès refusé', description: 'Vous n\'avez pas accès à cette page.'},
+    404: {title: 'Page introuvable', description: 'Désolé, la page que vous cherchez n\'existe pas.'},
+    500: {title: 'Erreur serveur', description: 'Une erreur est survenue de notre côté. Merci de réessayer plus tard.'},
+    503: {title: 'Service indisponible', description: 'Le site est en maintenance. Revenez dans quelques instants.'},
+} %}
+{% set message = messages[status_code] ?? messages[500] %}
+
+{% block title %}{{ message.title }} – {{ parent() }}{% endblock %}
+
+{% block body %}
+    <twig:PageHeader :title="status_code" :subtitle="message.title" />
+
+    <div class="page-body">
+        <section class="panel panel--center">
+            <p>{{ message.description }}</p>
+            <a href="{{ path('app_home') }}" class="gold-button">Retour à l'accueil</a>
+        </section>
+    </div>
+{% endblock %}

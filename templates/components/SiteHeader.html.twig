@@ -1,0 +1,32 @@
+{% set links = [
+    {route: 'app_home', label: 'Accueil'},
+    {route: 'app_workshops', label: 'Les ateliers'},
+    {route: 'app_speaker', label: 'Intervenant'},
+    {route: 'app_photos', label: 'Photos'},
+    {route: 'app_contact', label: 'Contact'},
+] %}
+{% set bolt_path = 'M0 6 L12 5 L17 10 L29 2 L35 8 L49 4 L54 11 L67 3 L73 8 L87 2 L100 6' %}
+<header class="site-header"
+    data-controller="site-header"
+    data-action="scroll@window->site-header#updateFixed:passive turbo:before-cache@document->site-header#close"
+>
+    <a href="{{ path('app_home') }}" class="site-brand" aria-label="Accueil">F · D · P</a>
+    <button type="button" class="site-burger" aria-expanded="false" aria-controls="site-nav"
+        data-site-header-target="burger" data-action="site-header#toggle"
+    >
+        <span class="sr-only">Menu</span>
+        <span aria-hidden="true"></span>
+    </button>
+    <nav id="site-nav" class="site-nav" data-site-header-target="nav">
+        {% for link in links %}
+            <a href="{{ path(link.route) }}"{% if app.current_route == link.route %} aria-current="page"{% endif %}>
+                {{ link.label }}
+                {# Crackling lightning under the item, shown on hover and on the active page. #}
+                <svg class="nav-bolt" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="nav-bolt-glow" d="{{ bolt_path }}" pathLength="1"/>
+                    <path class="nav-bolt-core" d="{{ bolt_path }}" pathLength="1"/>
+                </svg>
+            </a>
+        {% endfor %}
+    </nav>
+</header>

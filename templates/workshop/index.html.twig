@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les ateliers – {{ parent() }}{% endblock %}
+
+{% block body %}
+    <twig:PageHeader title="Les ateliers" subtitle="Théâtre adulte" />
+
+    <div class="page-body">
+        <section class="panel">
+            <h2>Les créneaux</h2>
+            <p class="lead">Organisés par la Compagnie Domovoi, les ateliers se déroulent en deux groupes distincts.</p>
+            <ul class="slots">
+                <li class="slot">
+                    <span class="slot-day">Mardi</span>
+                    <span class="slot-hours">20h – 22h</span>
+                    <span class="slot-place">Salle des Arceaux, 14 bis rue Saint-Louis</span>
+                </li>
+                <li class="slot">
+                    <span class="slot-day">Jeudi</span>
+                    <span class="slot-hours">19h30 – 21h30</span>
+                    <span class="slot-place">16 rue Dom Vaissette</span>
+                </li>
+            </ul>
+            <p>Premier cours le 16 et 18 septembre.</p>
+            <p>Cours hebdomadaire (hors vacances scolaires).</p>
+        </section>
+
+        <section class="panel">
+            <h2>Contenu</h2>
+            <p>Travail du lâcher-prise, de l'improvisation, du corps, de l'espace, du rythme dans une première partie de l'année.</p>
+            <p>Travail du texte dans un second temps et mise en scène d'un spectacle à partir de janvier. Plusieurs représentations en juin.</p>
+        </section>
+
+        <section class="panel panel--center">
+            <h2>Tarifs</h2>
+            <p class="price">400 € l'année</p>
+            <p>Paiement en plusieurs fois possible.</p>
+            <a href="{{ path('app_contact') }}" class="gold-button">S'inscrire</a>
+        </section>
+    </div>
+{% endblock %}

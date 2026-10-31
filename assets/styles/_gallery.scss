@@ -89,3 +89,7 @@
 .lightbox-next {
     right: 8px;
 }
+
+.lightbox[hidden] {
+    display: none;
+}
