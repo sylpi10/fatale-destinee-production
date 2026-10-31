@@ -9,9 +9,8 @@
 
 {% block layout %}
     <div class="home">
-        {# Placeholders until the photos of the two actors in black kimonos, back to back. #}
-        <twig:KimonoSilhouette class="home-figure home-figure--left" hair="topknot" />
-        <twig:KimonoSilhouette class="home-figure home-figure--right" hair="bun" mirrored />
+        <img src="{{ asset('images/teddy.png') }}" class="home-figure home-figure--left" width="300" alt="image Teddy">
+        <img src="{{ asset('images/angeline.png') }}" class="home-figure home-figure--right" height="300" alt="image Angeline">
 
         <main class="home-center">
             <twig:FlashMessages />

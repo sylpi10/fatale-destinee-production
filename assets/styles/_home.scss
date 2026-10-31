@@ -1,8 +1,5 @@
 @use "variables" as *;
 
-// Home page, from the brief: Canson paper, felt-pen red border, the stamp logo
-// in the middle with the menu under it, the two actors back to back on the sides.
-
 .home {
     position: relative;
     min-height: 100vh;
@@ -21,11 +18,18 @@
     align-items: center;
     gap: clamp(16px, 3vh, 32px);
     padding: 48px 16px;
+    @media (max-width: $bp-mobile) {
+        align-self: flex-start;
+        padding: 24px 14px;
+    }
 }
 
 .home-logo {
     margin: 0;
     line-height: 0;
+    @media (max-width: $bp-mobile) {
+        max-width: 300px;
+    }
 }
 
 .home-logo-button {
@@ -96,28 +100,30 @@
 }
 
 .home-figure {
-    height: min(82vh, 820px);
+    height: min(72vh, 820px);
     width: auto;
     margin: 0 clamp(8px, 4vw, 72px) 0;
     margin-bottom: 18px; // stand on the felt border
     color: $ink;
 
-    // Explicit rows too: the auto-placement would push the centre below the right figure.
     &--left {
         grid-area: 1 / 1;
         justify-self: end;
     }
 
     &--right {
-        grid-area: 1 / 3;
+        // grid-area: 1 / 3;
         justify-self: start;
     }
 
+    @media (min-width: $bp-nav) {
+        min-width: 300px;
+    }
     @media (max-width: $bp-nav) {
         position: absolute;
         bottom: 0;
         height: 46vh;
-        opacity: 0.18;
+        opacity: 0.28;
         margin: 0 0 18px;
 
         &--left {
@@ -128,18 +134,13 @@
             right: 6%;
         }
     }
-}
+    @media (max-width: $bp-mobile) {
+        &--left {
+            left: 0;
+        }
 
-.kimono {
-    .kimono-body {
-        fill: currentColor;
-    }
-
-    .kimono-detail {
-        stroke: #3a3a3a;
-    }
-
-    &--mirrored {
-        transform: scaleX(-1);
+        &--right {
+            right: 0;
+        }
     }
 }

@@ -13,12 +13,12 @@
 }
 
 .site-logo {
+    // position: fixed;
     position: absolute;
     z-index: 10;
     top: calc(#{$felt-inset} + 18px);
     left: calc(#{$felt-inset} + 22px);
     line-height: 0;
-
     img {
         width: clamp(72px, 9vw, 120px);
     }
@@ -26,6 +26,9 @@
     @media (max-width: $bp-mobile) {
         top: 20px;
         left: 20px;
+    }
+    &:hover {
+        animation: home-logo-hit 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
     }
 }
 
