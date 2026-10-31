@@ -82,6 +82,10 @@ class Show
     #[Assert\Url(requireTld: true)]
     private ?string $teaserUrl = null;
 
+    /** Teaser uploaded as a video file, file name in public/uploads/spectacles. Wins over $teaserUrl. */
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $teaserFile = null;
+
     /** Main photo, file name in public/uploads/spectacles. */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
@@ -96,8 +100,14 @@ class Show
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $standsTechnicalRider = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pressPhotos = null;
+    /**
+     * Photos for the press and programmers, file names in public/uploads/spectacles.
+     * Kept in their original format: they are downloaded for print, where WebP is often not supported.
+     *
+     * @var list<string>
+     */
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    private array $pressPhotos = [];
 
     /** @var Collection<int, ShowCredit> */
     #[ORM\OneToMany(targetEntity: ShowCredit::class, mappedBy: 'show', cascade: ['persist'], orphanRemoval: true)]
@@ -276,6 +286,18 @@ class Show
         return $this;
     }
 
+    public function getTeaserFile(): ?string
+    {
+        return $this->teaserFile;
+    }
+
+    public function setTeaserFile(?string $teaserFile): static
+    {
+        $this->teaserFile = $teaserFile;
+
+        return $this;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
@@ -324,14 +346,20 @@ class Show
         return $this;
     }
 
-    public function getPressPhotos(): ?string
+    /**
+     * @return list<string>
+     */
+    public function getPressPhotos(): array
     {
         return $this->pressPhotos;
     }
 
-    public function setPressPhotos(?string $pressPhotos): static
+    /**
+     * @param list<string>|null $pressPhotos null when the admin removes every photo
+     */
+    public function setPressPhotos(?array $pressPhotos): static
     {
-        $this->pressPhotos = $pressPhotos;
+        $this->pressPhotos = array_values($pressPhotos ?? []);
 
         return $this;
     }
@@ -347,7 +375,6 @@ class Show
             'Dossier de diffusion' => $this->pressKit,
             'Fiche technique' => $this->technicalRider,
             'Fiche technique gradins' => $this->standsTechnicalRider,
-            'Photos communication' => $this->pressPhotos,
         ]);
     }
 

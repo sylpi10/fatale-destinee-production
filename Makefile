@@ -38,6 +38,7 @@ RSYNC_EXCLUDES = \
 	--exclude=/.env.dev \
 	--exclude=/.env.*.local \
 	--exclude=/.env.deploy \
+	--exclude=/php.ini \
 	--exclude=/.phpunit.cache/ \
 	--exclude=/tmp/ \
 	--exclude=/phpunit.xml

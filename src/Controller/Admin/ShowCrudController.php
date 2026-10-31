@@ -94,8 +94,19 @@ final class ShowCrudController extends AbstractCrudController
             ->setNumOfRows(10)
             ->setHelp('Séparer les paragraphes par une ligne vide.')
             ->hideOnIndex();
-        yield UrlField::new('teaserUrl', 'Teaser')
+        yield FormField::addFieldset('Teaser')
+            ->setHelp('Au choix : un lien YouTube / Vimeo, ou un fichier vidéo. Si les deux sont remplis, le fichier est affiché.')
+            ->hideOnIndex();
+        yield UrlField::new('teaserUrl', 'Lien')
             ->setHelp('Lien « intégrer » de la vidéo (YouTube : https://www.youtube.com/embed/…, Vimeo : https://player.vimeo.com/video/…).')
+            ->hideOnIndex();
+        yield FileField::new('teaserFile', 'Fichier vidéo')
+            ->setBasePath(self::UPLOAD_PATH)
+            ->setUploadDir('public/'.self::UPLOAD_PATH)
+            ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]')
+            ->mimeTypes('video/mp4,video/webm', 'MP4 ou WebM uniquement.')
+            ->maxSize('400M')
+            ->setHelp('MP4 (H.264) ou WebM, 400 Mo maximum. Une vidéo courte et compressée se charge plus vite chez les visiteurs.')
             ->hideOnIndex();
 
         yield FormField::addTab('Distribution');
@@ -111,7 +122,6 @@ final class ShowCrudController extends AbstractCrudController
             'pressKit' => 'Dossier de diffusion',
             'technicalRider' => 'Fiche technique',
             'standsTechnicalRider' => 'Fiche technique gradins',
-            'pressPhotos' => 'Photos communication',
         ] as $property => $label) {
             yield FileField::new($property, $label)
                 ->setBasePath(self::UPLOAD_PATH)
@@ -121,5 +131,16 @@ final class ShowCrudController extends AbstractCrudController
                 ->maxSize('50M')
                 ->hideOnIndex();
         }
+
+        // Original files, not converted to WebP: they are downloaded for print.
+        yield ImageField::new('pressPhotos', 'Photos communication')
+            ->setBasePath(self::UPLOAD_PATH)
+            ->setUploadDir('public/'.self::UPLOAD_PATH)
+            ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]')
+            ->setFormTypeOption('multiple', true)
+            ->mimeTypes('image/jpeg,image/png,image/webp', 'JPEG, PNG ou WebP uniquement.')
+            ->maxSize('30M')
+            ->setHelp('Plusieurs photos possibles (Ctrl ou Maj pour en choisir plusieurs). Gardées telles quelles, en pleine qualité, pour l’impression.')
+            ->hideOnIndex();
     }
 }

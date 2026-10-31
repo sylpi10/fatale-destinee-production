@@ -95,6 +95,60 @@ final class ShowCrudControllerTest extends WebTestCase
         }
     }
 
+    public function testAdminUploadsATeaserVideoAndSeveralPressPhotos(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser(['ROLE_ADMIN']));
+        $client->followRedirects();
+
+        $dir = sys_get_temp_dir().'/show-files-'.bin2hex(random_bytes(4));
+        mkdir($dir);
+        // The smallest file recognised as MP4: an "ftyp" box.
+        file_put_contents($dir.'/teaser.mp4', "\x00\x00\x00\x18ftypmp42\x00\x00\x00\x00mp42isom");
+        imagejpeg(imagecreatetruecolor(30, 20), $dir.'/photo-1.jpg');
+        imagejpeg(imagecreatetruecolor(20, 30), $dir.'/photo-2.jpg');
+
+        $crawler = $client->request('GET', '/admin');
+        $crawler = $client->click($crawler->selectLink('Créer Spectacle')->link());
+        $form = $crawler->selectButton('Créer')->form([
+            'Show[title]' => 'Spectacle filmé',
+            'Show[slug]' => 'spectacle-filme',
+            'Show[published]' => '1',
+        ]);
+        $form['Show[teaserFile][file]']->upload($dir.'/teaser.mp4');
+        $values = $form->getPhpFiles();
+        $values['Show']['pressPhotos']['file'] = [
+            ['name' => 'photo-1.jpg', 'type' => 'image/jpeg', 'tmp_name' => $dir.'/photo-1.jpg', 'error' => \UPLOAD_ERR_OK, 'size' => filesize($dir.'/photo-1.jpg')],
+            ['name' => 'photo-2.jpg', 'type' => 'image/jpeg', 'tmp_name' => $dir.'/photo-2.jpg', 'error' => \UPLOAD_ERR_OK, 'size' => filesize($dir.'/photo-2.jpg')],
+        ];
+        $client->request('POST', $form->getUri(), $form->getPhpValues(), $values);
+        self::assertResponseIsSuccessful();
+
+        $show = static::getContainer()->get(ShowRepository::class)->findOneBy(['slug' => 'spectacle-filme']);
+        self::assertInstanceOf(Show::class, $show);
+        $uploadDir = static::getContainer()->getParameter('kernel.project_dir').'/public/uploads/spectacles/';
+        $stored = [$show->getTeaserFile(), ...$show->getPressPhotos()];
+
+        try {
+            self::assertStringEndsWith('.mp4', (string) $show->getTeaserFile());
+            self::assertCount(2, $show->getPressPhotos());
+            foreach ($show->getPressPhotos() as $photo) {
+                // Kept as JPEG for print, not converted to WebP.
+                self::assertSame(IMAGETYPE_JPEG, exif_imagetype($uploadDir.$photo));
+            }
+
+            $client->request('GET', '/spectacles/spectacle-filme');
+            self::assertSelectorExists(\sprintf('.teaser video[src$="/uploads/spectacles/%s"]', $show->getTeaserFile()));
+            self::assertSelectorCount(2, '.pro-links a[download]');
+        } finally {
+            foreach (array_filter($stored) as $file) {
+                @unlink($uploadDir.$file);
+            }
+            array_map('unlink', glob($dir.'/*'));
+            rmdir($dir);
+        }
+    }
+
     public function testAdminEditsTheCompanyAndAMember(): void
     {
         $client = static::createClient();

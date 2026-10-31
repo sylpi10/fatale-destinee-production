@@ -38,7 +38,12 @@
             {% if show.catchphrase %}
                 <p class="catchphrase">{{ show.catchphrase }}</p>
             {% endif %}
-            {% if show.teaserUrl %}
+            {% if show.teaserFile %}
+                <div class="teaser frame">
+                    <video src="{{ asset('uploads/spectacles/' ~ show.teaserFile) }}" controls preload="metadata" playsinline
+                        aria-label="Teaser – {{ show.title }}"></video>
+                </div>
+            {% elseif show.teaserUrl %}
                 <div class="teaser frame">
                     <iframe src="{{ show.teaserUrl }}" title="Teaser – {{ show.title }}" loading="lazy"
                         allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
@@ -58,11 +63,14 @@
     {# Sketch 5'': documents for programmers, credits, past dates, photos, partners. #}
     <div class="section show-columns">
         <div>
-            {% if show.proDocuments is not empty %}
+            {% if show.proDocuments is not empty or show.pressPhotos is not empty %}
                 <h2 class="label frame frame--ink">Espace pro</h2>
                 <ul class="pro-links">
                     {% for label, file in show.proDocuments %}
                         <li><a href="{{ asset('uploads/spectacles/' ~ file) }}" download>{{ label }}</a></li>
+                    {% endfor %}
+                    {% for file in show.pressPhotos %}
+                        <li><a href="{{ asset('uploads/spectacles/' ~ file) }}" download>Photo communication{{ show.pressPhotos|length > 1 ? ' ' ~ loop.index }}</a></li>
                     {% endfor %}
                 </ul>
             {% endif %}

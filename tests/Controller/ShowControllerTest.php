@@ -71,6 +71,40 @@ final class ShowControllerTest extends WebTestCase
         self::assertSelectorTextSame('#site-menu a[aria-current="page"]', 'Spectacles');
     }
 
+    public function testAnUploadedTeaserWinsOverTheLinkAndPressPhotosAreDownloadable(): void
+    {
+        $this->persist((new Show())
+            ->setTitle('Girouette')
+            ->setSlug('girouette')
+            ->setPublished(true)
+            ->setTeaserUrl('https://player.vimeo.com/video/1')
+            ->setTeaserFile('girouette-teaser.mp4')
+            ->setPressPhotos(['girouette-1.jpg', 'girouette-2.jpg']));
+
+        $this->client->request('GET', '/spectacles/girouette');
+
+        self::assertSelectorExists('.teaser video[src="/uploads/spectacles/girouette-teaser.mp4"]');
+        self::assertSelectorNotExists('.teaser iframe');
+        self::assertSame(
+            [['Photo communication 1', '/uploads/spectacles/girouette-1.jpg'], ['Photo communication 2', '/uploads/spectacles/girouette-2.jpg']],
+            $this->client->getCrawler()->filter('.pro-links a[download]')->each(static fn ($a): array => [$a->text(), $a->attr('href')]),
+        );
+    }
+
+    public function testATeaserLinkIsEmbedded(): void
+    {
+        $this->persist((new Show())
+            ->setTitle('Girouette')
+            ->setSlug('girouette')
+            ->setPublished(true)
+            ->setTeaserUrl('https://player.vimeo.com/video/1'));
+
+        $this->client->request('GET', '/spectacles/girouette');
+
+        self::assertSelectorExists('.teaser iframe[src="https://player.vimeo.com/video/1"]');
+        self::assertSelectorNotExists('.teaser video');
+    }
+
     public function testUnpublishedOrUnknownShowIsNotFound(): void
     {
         $this->client->request('GET', '/spectacles/brouillon');
