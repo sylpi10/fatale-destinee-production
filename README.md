@@ -31,7 +31,9 @@ servis à la volée et les modifs n'apparaîtraient plus (supprimer `public/asse
 
 ## Admin
 
-EasyAdmin sur `/admin` (rôle `ROLE_ADMIN`), connexion via `/login`. Pas d'inscription : les comptes se créent en console.
+EasyAdmin sur `/admin` (rôle `ROLE_ADMIN`), connexion via `/login`. On y gère la compagnie (texte, image), les membres (= les `User` cochés « Sur la page Compagnie » : nom, portrait, présentation) et les spectacles (chacun porté par un membre).
+
+Pas d'inscription : les mots de passe se définissent en console. Un membre sans mot de passe ne peut pas se connecter.
 
 ```bash
 php bin/console app:admin:create pseudo                # demande le mot de passe ; le réinitialise si le compte existe

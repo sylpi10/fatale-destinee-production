@@ -65,16 +65,6 @@ final class SitePagesTest extends WebTestCase
         self::assertSelectorTextSame('#site-menu a[aria-current="page"]', 'Agenda');
     }
 
-    public function testCompanyPresentsBothFounders(): void
-    {
-        $client = static::createClient();
-        $client->request('GET', '/compagnie');
-
-        self::assertSelectorCount(2, '.member');
-        self::assertSelectorTextSame('.member:first-child h2', 'Teddy Moulin');
-        self::assertSelectorTextSame('.member:last-child h2', 'Angéline Delourme');
-    }
-
     public function testUnknownPageRendersTheSiteErrorPage(): void
     {
         // The custom error templates replace Symfony's exception page only without debug.

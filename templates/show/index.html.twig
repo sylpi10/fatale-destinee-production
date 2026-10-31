@@ -12,7 +12,7 @@
                     <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
                 {% endif %}
                 <h2>{{ show.title }}</h2>
-                <p>{{ [show.author, show.genre, show.creationYear ? 'Création ' ~ show.creationYear]|filter(v => v)|join(' · ') }}</p>
+                <p>{{ [show.member ? show.member.fullName, show.genre, show.creationYear ? 'Création ' ~ show.creationYear]|filter(v => v)|join(' · ') }}</p>
             </a>
         {% else %}
             <p>Les spectacles arrivent bientôt.</p>

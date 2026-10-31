@@ -6,6 +6,7 @@ namespace App\Tests\Controller;
 
 use App\Entity\Show;
 use App\Entity\ShowCredit;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -18,13 +19,16 @@ final class ShowControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
 
+        $teddy = (new User())->setUsername('teddy')->setFirstName('Teddy')->setLastName('Moulin')->setMember(true);
+
         $this->persist(
+            $teddy,
             (new Show())
                 ->setTitle('Qu\'est-ce que je fous là ?')
                 ->setSlug('qu-est-ce-que-je-fous-la')
                 ->setPublished(true)
                 ->setPosition(1)
-                ->setAuthor('Teddy Moulin')
+                ->setMember($teddy)
                 ->setGenre('Clown')
                 ->setCreationYear(2026)
                 ->setMinimumAge(8)

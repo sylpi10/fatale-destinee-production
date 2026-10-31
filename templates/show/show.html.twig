@@ -46,9 +46,9 @@
             {% endif %}
         </div>
         <div>
-            {% if show.synopsisParagraphs is not empty %}
+            {% if show.synopsis|paragraphs is not empty %}
                 <h2 class="sr-only">Synopsis</h2>
-                {% for paragraph in show.synopsisParagraphs %}
+                {% for paragraph in show.synopsis|paragraphs %}
                     <p>{{ paragraph|nl2br }}</p>
                 {% endfor %}
             {% endif %}

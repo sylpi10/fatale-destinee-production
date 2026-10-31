@@ -44,9 +44,10 @@ class Show
     #[ORM\Column]
     private int $position = 0;
 
-    /** Who carries the show: Teddy Moulin, Angéline Delourme… */
-    #[ORM\Column(length: 150, nullable: true)]
-    private ?string $author = null;
+    /** The member of the company who carries the show. */
+    #[ORM\ManyToOne(inversedBy: 'shows')]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?User $member = null;
 
     /** "Clown" */
     #[ORM\Column(length: 60, nullable: true)]
@@ -167,14 +168,14 @@ class Show
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getMember(): ?User
     {
-        return $this->author;
+        return $this->member;
     }
 
-    public function setAuthor(?string $author): static
+    public function setMember(?User $member): static
     {
-        $this->author = $author;
+        $this->member = $member;
 
         return $this;
     }
@@ -261,17 +262,6 @@ class Show
         $this->synopsis = $synopsis;
 
         return $this;
-    }
-
-    /**
-     * @return list<string>
-     */
-    public function getSynopsisParagraphs(): array
-    {
-        return array_values(array_filter(
-            array_map(trim(...), preg_split('/\R\s*\R/', (string) $this->synopsis) ?: []),
-            static fn (string $paragraph): bool => '' !== $paragraph,
-        ));
     }
 
     public function getTeaserUrl(): ?string

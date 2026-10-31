@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FileField;
@@ -38,7 +39,7 @@ final class ShowCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Spectacle')
             ->setEntityLabelInPlural('Spectacles')
             ->setDefaultSort(['position' => 'ASC', 'title' => 'ASC'])
-            ->setSearchFields(['title', 'author', 'genre']);
+            ->setSearchFields(['title', 'genre', 'member.firstName', 'member.lastName']);
     }
 
     public function configureActions(Actions $actions): Actions
@@ -66,7 +67,9 @@ final class ShowCrudController extends AbstractCrudController
             ->setUploadDir('public/'.self::UPLOAD_PATH)
             ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]')
             ->setHelp('En haut de la page et dans la liste des spectacles.');
-        yield TextField::new('author', 'Porté par')->setHelp('Ex. : Teddy Moulin');
+        yield AssociationField::new('member', 'Porté par')
+            ->setQueryBuilder(static fn ($queryBuilder) => $queryBuilder->andWhere('entity.member = true'))
+            ->setHelp('Membre de la compagnie (voir « Membres et comptes »).');
         yield BooleanField::new('published', 'Publié')->renderAsSwitch();
         yield IntegerField::new('position', 'Ordre')->setHelp('Ordre dans la liste, du plus petit au plus grand.');
 

@@ -59,6 +59,35 @@ final class ShowCrudControllerTest extends WebTestCase
         self::assertSelectorTextSame('h1', 'Nouveau spectacle');
     }
 
+    public function testAdminEditsTheCompanyAndAMember(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser(['ROLE_ADMIN']));
+        $client->followRedirects();
+
+        $client->request('GET', '/admin');
+        $client->clickLink('La compagnie');
+        $client->submitForm('Sauvegarder et modifier', [
+            'Company[presentation]' => 'Présentation modifiée.',
+        ]);
+        self::assertResponseIsSuccessful();
+
+        $client->clickLink('Membres et comptes');
+        $client->clickLink('Créer Membre');
+        $client->submitForm('Créer', [
+            'User[firstName]' => 'Teddy',
+            'User[lastName]' => 'Moulin',
+            'User[member]' => '1',
+            'User[bio]' => 'Une bio.',
+            'User[username]' => 'teddy',
+        ]);
+        self::assertResponseIsSuccessful();
+
+        $client->request('GET', '/compagnie');
+        self::assertSelectorTextSame('.company-intro p', 'Présentation modifiée.');
+        self::assertSelectorTextSame('.member h2', 'Teddy Moulin');
+    }
+
     /**
      * @param list<string> $roles
      */

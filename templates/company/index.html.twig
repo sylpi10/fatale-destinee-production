@@ -3,38 +3,45 @@
 {% block title %}Compagnie – {{ parent() }}{% endblock %}
 
 {% block body %}
-    {# Sketch 2: the logo big, the presentation of the company next to it. #}
+    {# Sketch 2: an image (the logo by default) and the presentation of the company. #}
     <section class="section company-intro">
-        <img src="{{ asset('images/logo-fdp.webp') }}" alt="" width="1024" height="1024">
+        {% if company.image %}
+            <img src="{{ asset('uploads/compagnie/' ~ company.image) }}" alt="">
+        {% else %}
+            <img src="{{ asset('images/logo-fdp.webp') }}" alt="" width="1024" height="1024">
+        {% endif %}
         <div>
             <h1 class="sr-only">La compagnie</h1>
-            <p>Fatale Destinée Production (FDP) est créée en 2025 par Angéline Delourme et Teddy Moulin. Elle développe un travail où l’absurde devient un outil pour interroger le sens de la vie et la place de l’individu dans le monde contemporain.</p>
-            <p>Sa démarche artistique s’appuie sur une écriture scénique mêlant humour décalé, détournements poétiques et situations apparemment dérisoires, qui révèlent pourtant une profondeur intime. L’absurde n’y est pas une fin en soi, mais un langage permettant de bousculer les évidences, d’ouvrir des espaces de réflexions et d’inviter le public à porter un regard renouvelé sur le réel.</p>
-            <p>À travers ses créations, FDP cherche à construire des formes sensibles et visuellement marquées, où l’humour fonctionne comme un vecteur d’émotions autant que de pensées.</p>
+            {% for paragraph in company.presentation|paragraphs %}
+                <p>{{ paragraph|nl2br }}</p>
+            {% endfor %}
         </div>
     </section>
 
-    {# Sketch 3: the two founders side by side. #}
-    <section class="section members">
-        <article class="member">
-            <div class="portrait frame">
-                <img src="{{ asset('images/compagnie/teddy-moulin.webp') }}" alt="Teddy Moulin" width="800" height="1200">
-            </div>
-            <h2>Teddy Moulin</h2>
-            <p>Teddy Moulin fait du clown parce que c’est l’endroit où il est encore possible de rater correctement.</p>
-            <p>Formé au théâtre à l’école de la Compagnie Maritime à Montpellier, puis au clown avec Christine Rossignol Dallaire, Alexandre Pavlata, Emmanuel Sembely, Arnaud Aymard, ainsi qu’à différentes techniques plus ou moins reconnues (chute, doute, enthousiasme mal placé), il développe une pratique du clown basée sur l’échec persistant et la tentative répétée d’aller mieux — sans preuve que ce soit une bonne idée.</p>
-            <p>Il tente de comprendre ce qu’il fait là, en fabriquant des spectacles où des personnages fragiles prennent de très mauvaises décisions avec beaucoup de conviction.</p>
-            <p>Son travail s’intéresse à des sujets simples : croire, obéir, espérer, recommencer… et parfois s’arrêter, mais rarement au bon moment.</p>
-            <p>Sur scène et dans la rue, il met en jeu des figures instables, influençables, souvent dépassées par des forces qui les rassurent autant qu’elles les écrasent. Des figures qui ressemblent, de loin, à nous.</p>
-        </article>
-        <article class="member">
-            <div class="portrait frame">
-                <img src="{{ asset('images/compagnie/angeline-delourme.webp') }}" alt="Angéline Delourme" width="800" height="1206">
-            </div>
-            <h2>Angéline Delourme</h2>
-            <p>Angéline Delourme se forme au métier de comédienne et de chanteuse au conservatoire de Perpignan de 2016 à 2020. Entre 2020 et 2025, elle approfondit sa pratique en explorant différentes méthodes de jeu : l’école du jeu à Paris, le Samovar (clown) à Bagnolet, une formation intensive de théâtre physique à Montpellier.</p>
-            <p>En parallèle de cet acte de formation continue, elle met en scène et joue des spectacles pour les enfants, et crée des solos/duos de clown pour l’univers du cabaret. En 2025, elle co-crée la forme longue d’un duo clowne/dragqueen, « Mâdame ».</p>
-            <p>Ce projet, autour de sa clowne Girouette Manigance, est sa première création en solo. Elle y mélange l’art du clown, du théâtre et du chant.</p>
-        </article>
-    </section>
+    {# Sketch 3: the members side by side. #}
+    {% if members is not empty %}
+        <section class="section members">
+            {% for member in members %}
+                <article class="member">
+                    {% if member.photo %}
+                        <div class="portrait frame">
+                            <img src="{{ asset('uploads/compagnie/' ~ member.photo) }}" alt="{{ member.fullName }}">
+                        </div>
+                    {% endif %}
+                    <h2>{{ member.fullName }}</h2>
+                    {% for paragraph in member.bio|paragraphs %}
+                        <p>{{ paragraph|nl2br }}</p>
+                    {% endfor %}
+                    {% set shows = member.shows|filter(show => show.published) %}
+                    {% if shows is not empty %}
+                        <ul class="member-shows">
+                            {% for show in shows %}
+                                <li><a class="frame" href="{{ path('app_show', {slug: show.slug}) }}">{{ show.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        </section>
+    {% endif %}
 {% endblock %}
