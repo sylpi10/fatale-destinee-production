@@ -14,7 +14,9 @@ final class SitePagesTest extends WebTestCase
      */
     public static function pages(): iterable
     {
-        yield 'home' => ['/', 'Fatale Destinée'];
+        yield 'company' => ['/compagnie', 'Compagnie'];
+        yield 'shows' => ['/spectacles', 'Spectacles'];
+        yield 'agenda' => ['/agenda', 'Agenda'];
         yield 'workshops' => ['/ateliers', 'Les ateliers'];
         yield 'speaker' => ['/intervenant', 'Intervenant'];
         yield 'photos' => ['/photos', 'Photos'];
@@ -34,13 +36,31 @@ final class SitePagesTest extends WebTestCase
         self::assertSelectorExists('.site-footer');
     }
 
+    public function testHomeShowsTheLogoAndTheMenuOfTheBrief(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorExists('h1 button[data-controller="logo-sound"] img[alt="Fatale Destinée Production"]');
+        self::assertSame(
+            ['Compagnie', 'Spectacles', 'Agenda', 'Ateliers'],
+            $crawler->filter('.home-nav a')->each(static fn ($link): string => $link->text()),
+        );
+        self::assertSame('/compagnie', $crawler->filter('.home-nav a')->first()->attr('href'));
+        self::assertSelectorCount(2, '.home-figure');
+        // The home page has its own layout: no inner page header or footer.
+        self::assertSelectorNotExists('.site-header');
+        self::assertSelectorNotExists('.site-footer');
+    }
+
     public function testMenuMarksTheCurrentPage(): void
     {
         $client = static::createClient();
         $client->request('GET', '/ateliers');
 
         self::assertSelectorCount(1, '.site-nav a[aria-current="page"]');
-        self::assertSelectorTextSame('.site-nav a[aria-current="page"]', 'Les ateliers');
+        self::assertSelectorTextSame('.site-nav a[aria-current="page"]', 'Ateliers');
     }
 
     public function testWorkshopsListsBothSlots(): void

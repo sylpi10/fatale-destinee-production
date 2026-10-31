@@ -1,6 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{# Placeholder until the new home page is designed. #}
-{% block body %}
-    <twig:PageHeader title="Fatale Destinée" subtitle="Production" />
+{% set links = [
+    {route: 'app_company', label: 'Compagnie'},
+    {route: 'app_shows', label: 'Spectacles'},
+    {route: 'app_agenda', label: 'Agenda'},
+    {route: 'app_workshops', label: 'Ateliers'},
+] %}
+
+{% block layout %}
+    <div class="home">
+        {# Felt-pen red line along the screen edges, like around the logo. #}
+        <div class="home-felt" aria-hidden="true"></div>
+        <svg class="home-filters" aria-hidden="true">
+            <filter id="felt">
+                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="7"/>
+                <feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+        </svg>
+
+        {# Placeholders until the photos of the two actors in black kimonos, back to back. #}
+        <twig:KimonoSilhouette class="home-figure home-figure--left" hair="topknot" />
+        <twig:KimonoSilhouette class="home-figure home-figure--right" hair="bun" mirrored />
+
+        <main class="home-center">
+            <twig:FlashMessages />
+            <h1 class="home-logo">
+                <button type="button" class="home-logo-button"
+                    data-controller="logo-sound"
+                    data-action="logo-sound#play"
+                    data-logo-sound-phrases-value="{{ ['Aïe !', 'Touche pas à mon chapeau !', 'Ouille !', 'Hé ho, doucement !']|json_encode }}"
+                >
+                    <img src="{{ asset('images/logo-fdp.webp') }}" alt="Fatale Destinée Production" width="1024" height="1024">
+                </button>
+            </h1>
+
+            <nav class="home-nav" aria-label="Menu principal">
+                {% for link in links %}
+                    <a href="{{ path(link.route) }}">{{ link.label }}</a>
+                {% endfor %}
+            </nav>
+        </main>
+    </div>
 {% endblock %}
