@@ -94,14 +94,14 @@
 .page-content {
     width: min(#{$content-width}, 100% - 2 * (#{$felt-inset} + 32px));
     margin: 0 auto;
-    padding: 150px 0 80px;
+    padding: 100px 0 80px;
 
     @media (max-width: $bp-mobile) {
         padding-top: 120px;
     }
 }
 
-// Big page title with the red rule under it (sketches 7 and 8).
+// Big page title with the red rule under it.
 .page-title {
     margin: 0 0 48px;
     padding-bottom: 12px;

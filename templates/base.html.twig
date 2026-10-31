@@ -27,7 +27,7 @@
     <body>
         <twig:FeltBorder />
         {% block layout %}
-            <div class="page">
+            <div class="page {% block page_class %}{% endblock %}">
                 <twig:SiteMenu />
                 <main class="page-content">
                     <twig:FlashMessages />

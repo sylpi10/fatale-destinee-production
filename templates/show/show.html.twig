@@ -2,6 +2,8 @@
 
 {% block title %}Qu'est-ce que je fous là ? – {{ parent() }}{% endblock %}
 
+{% block page_class %}page--show{% endblock %}
+
 {% block body %}
     {# Sketch 5: photo, back to the list, title, genre and key facts. #}
     <div class="show-banner">
@@ -9,6 +11,7 @@
         <a class="signpost" href="{{ path('app_shows') }}">Spectacles</a>
     </div>
 
+    <div class="show-details">
     <h1 class="show-title frame">Qu'est-ce que je fous là ?</h1>
     <div><span class="show-genre frame frame--thin">Clown</span></div>
     <ul class="show-facts">
@@ -64,4 +67,6 @@
             {% for i in 1..6 %}<li>Logo</li>{% endfor %}
         </ul>
     </section>
+    </div>
+
 {% endblock %}
