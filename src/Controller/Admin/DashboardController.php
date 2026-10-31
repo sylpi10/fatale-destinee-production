@@ -9,8 +9,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
@@ -44,6 +46,13 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(ShowCrudController::class, 'Spectacles', 'fa fa-masks-theater');
         yield MenuItem::section();
         yield MenuItem::linkToRoute('Voir le site', 'fa fa-arrow-up-right-from-square', 'app_home');
+        yield MenuItem::linkToRoute('Mon mot de passe', 'fa fa-key', 'admin_password');
         yield MenuItem::linkToLogout('Déconnexion', 'fa fa-right-from-bracket');
+    }
+
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        return parent::configureUserMenu($user)
+            ->addMenuItems([MenuItem::linkToRoute('Mon mot de passe', 'fa fa-key', 'admin_password')]);
     }
 }

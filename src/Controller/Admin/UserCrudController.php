@@ -66,7 +66,7 @@ final class UserCrudController extends AbstractCrudController
 
         yield FormField::addTab('Compte');
         yield TextField::new('username', 'Pseudo')
-            ->setHelp('Pour se connecter. Le mot de passe se définit en console : php bin/console app:admin:create <pseudo>. Sans mot de passe, le compte ne peut pas se connecter.');
+            ->setHelp('Pour se connecter. Le premier mot de passe se définit en console : php bin/console app:admin:create <pseudo> ; ensuite, chacun le change dans « Mon mot de passe ». Sans mot de passe, le compte ne peut pas se connecter.');
         yield ChoiceField::new('roles', 'Droits')
             ->setChoices(['Administrateur' => 'ROLE_ADMIN'])
             ->allowMultipleChoices()
