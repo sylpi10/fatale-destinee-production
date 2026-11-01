@@ -2,6 +2,9 @@
 
 html {
     background-color: $paper;
+    // Keeps the scrollbar's room even when nothing scrolls (open menu, short page):
+    // the page no longer jumps sideways when the scrollbar appears or disappears.
+    scrollbar-gutter: stable;
 }
 
 body {

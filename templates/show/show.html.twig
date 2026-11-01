@@ -10,7 +10,10 @@
         {% if show.image %}
             <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
         {% endif %}
-        <a class="signpost" href="{{ path('app_shows') }}">Spectacles</a>
+        <div class="signpost-container">
+            <a class="signpost" href="{{ path('app_shows') }}">Spectacles</a>
+            <span class="foot"></span>
+        </div>
     </div>
 
     <div class="show-details">

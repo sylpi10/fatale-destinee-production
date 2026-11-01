@@ -7,35 +7,46 @@
 }
 
 .show-card {
-    display: block;
+    display: flex;
+    flex-direction: column;
     color: inherit;
     text-decoration: none;
     transition: ease 0.4s;
-    padding-bottom: 24px;
+    border-radius: 4px;
+    overflow: hidden;
     img {
         display: block;
         width: 100%;
         aspect-ratio: 4 / 3;
         object-fit: cover;
     }
+    .card-footer {
+        padding: 12px;
+        background-color: rgba(255, 255, 255, 0.5);
+        h2 {
+            margin: 14px 0 0;
+            font-family: $font-title;
+            font-weight: 400;
+            font-size: 2.2rem;
+            line-height: 1;
+            color: $red;
+        }
 
-    h2 {
-        margin: 14px 0 0;
-        font-family: $font-title;
-        font-weight: 400;
-        font-size: 2.2rem;
-        line-height: 1;
-        color: $red;
-    }
-
-    p {
-        margin: 4px 0 0;
-        color: $ink-soft;
+        p {
+            margin: 4px 0 0;
+            color: $ink-soft;
+        }
     }
 
     &:is(a):hover {
         box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 20px -20px;
         transform: translateY(-8px);
+        h2 {
+            color: $ink-soft;
+        }
+        p {
+            color: $ink;
+        }
         img {
             filter: brightness(1.18);
         }
@@ -63,37 +74,62 @@
     }
 }
 
-.signpost {
-    --outline: 1px;
+.signpost-container {
+    width: fit-content;
     position: absolute;
-    left: 60px;
-    bottom: -18px;
-    isolation: isolate; // keeps ::before behind the text, above the photo
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 8px 18px 8px 26px;
-    background: $ink;
-    color: $ink;
-    font-family: $font-menu;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
-    clip-path: polygon(16px 0, 100% 0, 100% 100%, 16px 100%, 0 50%);
-
-    &::before {
-        content: "";
-        position: absolute;
-        inset: var(--outline);
-        z-index: -1;
-        background: $paper;
-        clip-path: polygon(15px 0, 100% 0, 100% 100%, 15px 100%, 0 50%);
+    left: 40px;
+    bottom: 0;
+    .signpost {
+        --outline: 1px;
+        // position: absolute;
+        position: relative;
+        // left: 60px;
+        // bottom: -18px;
+        isolation: isolate; // keeps ::before behind the text, above the photo
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px 8px 26px;
+        background: $ink;
+        color: $ink;
+        font-family: $font-menu;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-decoration: none;
+        clip-path: polygon(16px 0, 100% 0, 100% 100%, 16px 100%, 0 50%);
+        transition: ease 0.4s;
+        &::before {
+            content: "";
+            position: absolute;
+            inset: var(--outline);
+            z-index: -1;
+            background: $paper;
+            clip-path: polygon(15px 0, 100% 0, 100% 100%, 15px 100%, 0 50%);
+        }
+        &:hover {
+            background: $red;
+            color: $red;
+            padding: 8px 22px 8px 32px;
+        }
     }
-
-    &:hover {
-        background: $red;
-        color: $red;
+    .foot {
+        height: 65px;
+        border-left: solid 3px $paper;
+        transform: skew(-4deg);
+    }
+    @media (max-width: $bp-mobile) {
+        left: 24px;
+        .signpost {
+            padding: 6px 12px 6px 20px;
+            font-size: 0.9rem;
+        }
+        .foot {
+            height: 26px;
+        }
     }
 }
 

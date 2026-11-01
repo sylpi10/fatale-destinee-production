@@ -67,6 +67,10 @@
         font-family: $font-title;
         font-size: 1.5rem;
         text-decoration: none;
+        transition: ease 0.4s;
+        &:hover {
+            padding: 12px 25px;
+        }
     }
 }
 
