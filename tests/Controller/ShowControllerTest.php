@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Performance;
 use App\Entity\Show;
 use App\Entity\ShowCredit;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 
 final class ShowControllerTest extends WebTestCase
 {
+    use ClockSensitiveTrait;
+
     private KernelBrowser $client;
 
     protected function setUp(): void
@@ -66,8 +70,10 @@ final class ShowControllerTest extends WebTestCase
         self::assertSelectorTextSame('.catchphrase', 'Moroze cherche sa place.');
         self::assertSelectorCount(2, '.show-columns p:not(.catchphrase):not(.placeholder)');
         self::assertSelectorTextSame('.credits dd', 'Teddy Moulin');
-        // No document uploaded: no "Espace pro".
+        // No document, date or photo: no "Espace pro", "Quelques dates jouées" or carousel.
         self::assertSelectorNotExists('.pro-links');
+        self::assertSelectorNotExists('.played-dates');
+        self::assertSelectorNotExists('.carousel');
         self::assertSelectorTextSame('#site-menu a[aria-current="page"]', 'Spectacles');
     }
 
@@ -103,6 +109,58 @@ final class ShowControllerTest extends WebTestCase
 
         self::assertSelectorExists('.teaser iframe[src="https://player.vimeo.com/video/1"]');
         self::assertSelectorNotExists('.teaser video');
+    }
+
+    public function testPastDatesAreOnTheShowPageAndUpcomingOnesOnTheAgenda(): void
+    {
+        static::mockTime('2026-06-15 10:00');
+        $show = (new Show())
+            ->setTitle('Girouette')
+            ->setSlug('girouette')
+            ->setPublished(true)
+            ->addPerformance((new Performance())->setDate(new \DateTimeImmutable('2026-03-02'))->setPlace('Perpignan'))
+            ->addPerformance((new Performance())->setDate(new \DateTimeImmutable('2026-05-20'))->setPlace('Montpellier')->setEvent('Festival Saperlipopette'))
+            ->addPerformance((new Performance())->setDate(new \DateTimeImmutable('2026-06-15'))->setPlace('Sète'))
+            ->addPerformance((new Performance())->setDate(new \DateTimeImmutable('2026-09-01'))->setPlace('Nîmes'));
+        $draft = (new Show())->setTitle('Brouillon 2')->setSlug('brouillon-2')
+            ->addPerformance((new Performance())->setDate(new \DateTimeImmutable('2026-07-01'))->setPlace('Lyon'));
+        $this->persist($show, $draft);
+
+        $this->client->request('GET', '/spectacles/girouette');
+        self::assertSame(
+            ['20 mai 2026 – Montpellier – Festival Saperlipopette', '2 mars 2026 – Perpignan'],
+            $this->client->getCrawler()->filter('.played-dates li')->each(static fn ($li): string => $li->text()),
+        );
+
+        // Today's date is still to come; the draft show's date is not listed.
+        $this->client->request('GET', '/agenda');
+        self::assertSame(
+            [['15 juin 2026', 'Girouette', 'Sète'], ['1 sept. 2026', 'Girouette', 'Nîmes']],
+            $this->client->getCrawler()->filter('.agenda-row')->each(static fn ($row): array => [
+                $row->filter('.agenda-row-date')->text(),
+                $row->filter('.agenda-row-show')->text(),
+                $row->filter('.agenda-row-place')->text(),
+            ]),
+        );
+        $this->client->clickLink('Girouette');
+        self::assertSelectorTextSame('h1', 'Girouette');
+    }
+
+    public function testThePhotosOfTheShowAreInACarousel(): void
+    {
+        $this->persist((new Show())
+            ->setTitle('Girouette')
+            ->setSlug('girouette')
+            ->setPublished(true)
+            ->setGalleryPhotos(['girouette-1.webp', 'girouette-2.webp']));
+
+        $this->client->request('GET', '/spectacles/girouette');
+
+        self::assertSame(
+            ['/uploads/spectacles/girouette-1.webp', '/uploads/spectacles/girouette-2.webp'],
+            $this->client->getCrawler()->filter('[data-controller="carousel"] img')->each(static fn ($img): ?string => $img->attr('src')),
+        );
+        self::assertSelectorExists('[data-action="carousel#next"]');
     }
 
     public function testUnpublishedOrUnknownShowIsNotFound(): void

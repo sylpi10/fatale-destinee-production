@@ -85,10 +85,32 @@
             {% endif %}
         </div>
         <div>
-            {# Come with the agenda and the photo gallery. #}
-            <h2 class="label frame frame--ink">Quelques dates jouées</h2>
-            <p class="placeholder">Dates à venir</p>
-            <div class="placeholder frame">Carrousel des photos du spectacle à venir</div>
+            {% if past_performances is not empty %}
+                <h2 class="label frame frame--ink">Quelques dates jouées</h2>
+                <ul class="played-dates">
+                    {% for performance in past_performances %}
+                        <li>
+                            <strong>{{ performance.date|format_date(pattern: 'd MMM y') }}</strong>
+                            – {{ performance.place }}{% if performance.event %} – {{ performance.event }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if show.galleryPhotos is not empty %}
+                <h2 class="sr-only">Photos du spectacle</h2>
+                <div class="carousel frame" data-controller="carousel">
+                    <ul class="carousel-track" data-carousel-target="track" tabindex="0" aria-label="Photos du spectacle">
+                        {% for photo in show.galleryPhotos %}
+                            <li><img src="{{ asset('uploads/spectacles/' ~ photo) }}" alt="Photo {{ loop.index }} sur {{ loop.length }}" loading="lazy"></li>
+                        {% endfor %}
+                    </ul>
+                    {% if show.galleryPhotos|length > 1 %}
+                        <button type="button" class="carousel-button carousel-button--prev" data-action="carousel#previous" aria-label="Photo précédente">‹</button>
+                        <button type="button" class="carousel-button carousel-button--next" data-action="carousel#next" aria-label="Photo suivante">›</button>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 

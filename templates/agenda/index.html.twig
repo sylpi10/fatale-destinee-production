@@ -5,19 +5,22 @@
 {% block body %}
     <twig:PageTitle title="Agenda" />
 
-    {# Example rows showing the layout of sketch 7, until the dates come from the admin. #}
-    <ul class="agenda">
-        <li class="agenda-row">
-            <span class="agenda-row-date">12 déc. 2026</span>
-            <span class="agenda-row-show agenda-row-show--teddy">Qu'est-ce que je fous là ?</span>
-            <span class="agenda-row-place">Montpellier</span>
-            <span class="agenda-row-event">Exemple de festival</span>
-        </li>
-        <li class="agenda-row">
-            <span class="agenda-row-date">20 jan. 2027</span>
-            <span class="agenda-row-show agenda-row-show--angeline">Girouette Manigance</span>
-            <span class="agenda-row-place">Perpignan</span>
-            <span class="agenda-row-event">Exemple de saison culturelle</span>
-        </li>
-    </ul>
+    {# Sketch 7: date – show (Teddy's in bright red, Angéline's in burgundy) – place – event. #}
+    {% if performances is empty %}
+        <p class="placeholder">Les prochaines dates arrivent bientôt.</p>
+    {% else %}
+        <ul class="agenda">
+            {% for performance in performances %}
+                <li class="agenda-row">
+                    <span class="agenda-row-date">{{ performance.date|format_date(pattern: 'd MMM y') }}</span>
+                    <a class="agenda-row-show agenda-row-show--{{ performance.show.member.username|default('') }}"
+                        href="{{ path('app_show', {slug: performance.show.slug}) }}">{{ performance.show.title }}</a>
+                    <span class="agenda-row-place">{{ performance.place }}</span>
+                    {% if performance.event %}
+                        <span class="agenda-row-event">{{ performance.event }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

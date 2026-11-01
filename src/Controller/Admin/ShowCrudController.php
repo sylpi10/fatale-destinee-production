@@ -117,6 +117,28 @@ final class ShowCrudController extends AbstractCrudController
             ->setHelp('Ex. : « De et avec » → Teddy Moulin.')
             ->hideOnIndex();
 
+        yield FormField::addTab('Dates');
+        yield CollectionField::new('performances', 'Dates')
+            ->useEntryCrudForm(PerformanceCrudController::class)
+            ->allowAdd()
+            ->allowDelete()
+            ->setHelp('Les dates passées s’affichent sur la page du spectacle (« Quelques dates jouées »), les dates à venir dans l’Agenda.')
+            ->hideOnIndex();
+
+        yield FormField::addTab('Photos');
+        yield ImageField::new('galleryPhotos', 'Photos du spectacle')
+            // Optional: EasyAdmin makes the field required because the column is NOT NULL (empty list).
+            ->setRequired(false)
+            ->setBasePath(self::UPLOAD_PATH)
+            ->setUploadDir('public/'.self::UPLOAD_PATH)
+            ->setUploadedFileNamePattern('[slug]-[randomhash].webp')
+            ->setFormTypeOption('multiple', true)
+            ->setFormTypeOption('upload_new', $this->webpConverter)
+            ->mimeTypes('image/jpeg,image/png,image/gif,image/webp', 'JPEG, PNG, GIF ou WebP uniquement.')
+            ->maxSize('30M')
+            ->setHelp('Le carrousel de la page du spectacle, dans l’ordre d’envoi. Plusieurs photos possibles (Ctrl ou Maj pour en choisir plusieurs).')
+            ->hideOnIndex();
+
         yield FormField::addTab('Espace pro');
         foreach ([
             'pressKit' => 'Dossier de diffusion',
@@ -134,6 +156,8 @@ final class ShowCrudController extends AbstractCrudController
 
         // Original files, not converted to WebP: they are downloaded for print.
         yield ImageField::new('pressPhotos', 'Photos communication')
+            // Optional: EasyAdmin makes the field required because the column is NOT NULL (empty list).
+            ->setRequired(false)
             ->setBasePath(self::UPLOAD_PATH)
             ->setUploadDir('public/'.self::UPLOAD_PATH)
             ->setUploadedFileNamePattern('[slug]-[randomhash].[extension]')

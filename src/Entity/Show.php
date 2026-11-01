@@ -109,15 +109,30 @@ class Show
     #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
     private array $pressPhotos = [];
 
+    /**
+     * Photos of the carousel (sketch 5''), converted to WebP, file names in public/uploads/spectacles.
+     *
+     * @var list<string>
+     */
+    #[ORM\Column(type: Types::JSON, options: ['default' => '[]'])]
+    private array $galleryPhotos = [];
+
     /** @var Collection<int, ShowCredit> */
     #[ORM\OneToMany(targetEntity: ShowCredit::class, mappedBy: 'show', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => 'ASC'])]
     #[Assert\Valid]
     private Collection $credits;
 
+    /** @var Collection<int, Performance> */
+    #[ORM\OneToMany(targetEntity: Performance::class, mappedBy: 'show', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['date' => 'DESC'])]
+    #[Assert\Valid]
+    private Collection $performances;
+
     public function __construct()
     {
         $this->credits = new ArrayCollection();
+        $this->performances = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -365,6 +380,24 @@ class Show
     }
 
     /**
+     * @return list<string>
+     */
+    public function getGalleryPhotos(): array
+    {
+        return $this->galleryPhotos;
+    }
+
+    /**
+     * @param list<string>|null $galleryPhotos null when the admin removes every photo
+     */
+    public function setGalleryPhotos(?array $galleryPhotos): static
+    {
+        $this->galleryPhotos = array_values($galleryPhotos ?? []);
+
+        return $this;
+    }
+
+    /**
      * Documents of the "Espace pro" that have a file, label => file name.
      *
      * @return array<string, string>
@@ -400,6 +433,48 @@ class Show
     {
         if ($this->credits->removeElement($credit) && $credit->getShow() === $this) {
             $credit->setShow(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Performance> most recent first
+     */
+    public function getPerformances(): Collection
+    {
+        return $this->performances;
+    }
+
+    /**
+     * Dates already played ("Quelques dates jouées"), most recent first.
+     *
+     * @return list<Performance>
+     */
+    public function getPastPerformances(\DateTimeImmutable $today): array
+    {
+        $today = $today->setTime(0, 0);
+        $past = array_filter($this->performances->toArray(), static fn (Performance $performance): bool => $performance->getDate() < $today);
+        // The collection is only sorted when loaded from the database.
+        usort($past, static fn (Performance $a, Performance $b): int => $b->getDate() <=> $a->getDate());
+
+        return $past;
+    }
+
+    public function addPerformance(Performance $performance): static
+    {
+        if (!$this->performances->contains($performance)) {
+            $this->performances->add($performance);
+            $performance->setShow($this);
+        }
+
+        return $this;
+    }
+
+    public function removePerformance(Performance $performance): static
+    {
+        if ($this->performances->removeElement($performance) && $performance->getShow() === $this) {
+            $performance->setShow(null);
         }
 
         return $this;

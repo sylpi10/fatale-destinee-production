@@ -215,3 +215,78 @@
         background: #000;
     }
 }
+
+// Sketch 5'': "Quelques dates jouées", then the photos that scroll with the arrow.
+.played-dates {
+    margin: 0 0 32px;
+    padding: 0;
+    list-style: none;
+
+    li {
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(20, 20, 20, 0.2);
+    }
+
+    strong {
+        text-transform: uppercase;
+    }
+}
+
+.carousel {
+    position: relative;
+    padding: 8px;
+}
+
+.carousel-track {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    li {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+    }
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(245, 242, 233, 0.85);
+    color: $red;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &--prev {
+        left: 16px;
+    }
+
+    &--next {
+        right: 16px;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $red;
+        outline-offset: 2px;
+    }
+}
