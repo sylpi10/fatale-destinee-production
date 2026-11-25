@@ -178,6 +178,10 @@ final class ShowControllerTest extends WebTestCase
         );
         self::assertSelectorExists('[data-action="carousel#next"]');
         self::assertSelectorExists('.carousel img[alt="Girouette – photo 2 sur 2"]');
+        self::assertSelectorExists('[role="region"][aria-roledescription="carrousel"][aria-label="Photos du spectacle"]');
+        self::assertSelectorExists('#carousel-girouette.carousel-track[tabindex="0"]');
+        self::assertSelectorTextContains('[data-action="carousel#next"][aria-controls="carousel-girouette"] .sr-only', 'Photo suivante');
+        self::assertSelectorExists('[data-carousel-target="status"][aria-live="polite"]');
     }
 
     public function testTheShowDescriptionComesFromItsTexts(): void

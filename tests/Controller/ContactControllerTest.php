@@ -47,6 +47,9 @@ final class ContactControllerTest extends WebTestCase
         self::assertEmailCount(0);
         self::assertSelectorTextSame('.form-error', 'Cette adresse e-mail n\'est pas valide.');
         self::assertInputValueSame('contact[name]', 'Jeanne Dupont');
+        // Screen readers read the error with the field.
+        self::assertSelectorExists('#contact_email[aria-invalid="true"][aria-describedby="contact_email_error1"]');
+        self::assertSelectorTextSame('#contact_email_error1', 'Cette adresse e-mail n\'est pas valide.');
     }
 
     public function testHoneypotSilentlyDropsTheMessage(): void

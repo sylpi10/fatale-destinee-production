@@ -79,6 +79,24 @@ final class SitePagesTest extends WebTestCase
         }
     }
 
+    public function testKeyboardUsersCanSkipToTheContentAndOpenTheMenu(): void
+    {
+        $client = static::createClient();
+        foreach (['/', '/agenda'] as $url) {
+            $crawler = $client->request('GET', $url);
+
+            // The skip link is the first link of the page and leads to <main>.
+            self::assertSame('#contenu', $crawler->filter('a')->first()->attr('href'), $url);
+            self::assertSame('main', $crawler->filter('#contenu')->nodeName(), $url);
+        }
+
+        self::assertSelectorExists('button[aria-controls="site-menu"][aria-expanded="false"]');
+        self::assertSelectorExists('nav#site-menu[aria-label="Menu principal"][hidden]');
+        // What the menu makes inert while it is open.
+        self::assertSelectorExists('main[data-menu-inert]');
+        self::assertSelectorExists('footer[data-menu-inert]');
+    }
+
     public function testLoginPageIsNotIndexed(): void
     {
         $client = static::createClient();

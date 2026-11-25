@@ -25,9 +25,13 @@
         font: inherit;
 
         &:focus {
-            outline: none;
             border-color: $red;
-            box-shadow: 0 0 0 2px rgba(162, 5, 5, 0.15);
+            outline: 2px solid $red;
+            outline-offset: 0;
+        }
+
+        &[aria-invalid="true"] {
+            border-color: $red;
         }
     }
 

@@ -27,15 +27,17 @@
         {% endif %}
     </head>
     <body>
+        {# First thing reached with Tab: jumps over the logo and the menu. #}
+        <a class="skip-link" href="#contenu" data-menu-inert>Aller au contenu</a>
         <twig:FeltBorder />
         {% block layout %}
             <div class="page {% block page_class %}{% endblock %}">
                 <twig:SiteMenu />
-                <main class="page-content">
+                <main id="contenu" class="page-content" tabindex="-1" data-menu-inert>
                     <twig:FlashMessages />
                     {% block body %}{% endblock %}
                 </main>
-                <twig:SiteFooter />
+                <twig:SiteFooter data-menu-inert />
             </div>
         {% endblock %}
     </body>

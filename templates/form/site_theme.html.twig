@@ -1,17 +1,21 @@
 {# Markup of the site forms: one .input-wrapper per field, errors under the field. #}
 {% use 'form_div_layout.html.twig' %}
 
-{% block form_row %}
+{# Only the markup changes: Symfony's form_row still sets aria-invalid and aria-describedby
+   (pointing to the errors below) on the field, through widget_attr. #}
+{% block form_row_render %}
     {% set row_attr = row_attr|merge({class: ('input-wrapper ' ~ (row_attr.class ?? ''))|trim}) %}
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{ form_label(form) }}
-        {{ form_widget(form) }}
+        {{ form_widget(form, widget_attr) }}
+        {{ form_help(form) }}
         {{ form_errors(form) }}
     </div>
 {% endblock %}
 
 {% block form_errors %}
     {% for error in errors %}
-        <p class="form-error">{{ error.message }}</p>
+        {# Errors of the whole form (expired page…) have no field to point to them: read out at once. #}
+        <p class="form-error" id="{{ id ~ '_error' ~ loop.index }}"{% if form.parent is null %} role="alert"{% endif %}>{{ error.message }}</p>
     {% endfor %}
 {% endblock %}

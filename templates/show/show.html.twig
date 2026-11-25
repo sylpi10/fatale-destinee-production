@@ -104,15 +104,23 @@
 
             {% if show.galleryPhotos is not empty %}
                 <h2 class="sr-only">Photos du spectacle</h2>
-                <div class="carousel frame" data-controller="carousel">
-                    <ul class="carousel-track" data-carousel-target="track" tabindex="0" aria-label="Photos du spectacle">
+                {# A region named "carrousel" for screen readers; the arrows say which photo is shown. #}
+                <div class="carousel frame" data-controller="carousel" role="region" aria-roledescription="carrousel" aria-label="Photos du spectacle">
+                    <ul id="{{ 'carousel-' ~ show.slug }}" class="carousel-track" data-carousel-target="track" data-action="scroll->carousel#update" tabindex="0" aria-label="Photos, à faire défiler avec les flèches du clavier">
                         {% for photo in show.galleryPhotos %}
-                            <li><img src="{{ asset('uploads/spectacles/' ~ photo) }}" alt="{{ show.title }} – photo {{ loop.index }} sur {{ loop.length }}" loading="lazy"></li>
+                            <li role="group" aria-roledescription="photo" aria-label="{{ loop.index }} sur {{ loop.length }}">
+                                <img src="{{ asset('uploads/spectacles/' ~ photo) }}" alt="{{ show.title }} – photo {{ loop.index }} sur {{ loop.length }}" loading="lazy">
+                            </li>
                         {% endfor %}
                     </ul>
                     {% if show.galleryPhotos|length > 1 %}
-                        <button type="button" class="carousel-button carousel-button--prev" data-action="carousel#previous" aria-label="Photo précédente">‹</button>
-                        <button type="button" class="carousel-button carousel-button--next" data-action="carousel#next" aria-label="Photo suivante">›</button>
+                        <button type="button" class="carousel-button carousel-button--prev" data-action="carousel#previous" aria-controls="{{ 'carousel-' ~ show.slug }}">
+                            <span aria-hidden="true">‹</span><span class="sr-only">Photo précédente</span>
+                        </button>
+                        <button type="button" class="carousel-button carousel-button--next" data-action="carousel#next" aria-controls="{{ 'carousel-' ~ show.slug }}">
+                            <span aria-hidden="true">›</span><span class="sr-only">Photo suivante</span>
+                        </button>
+                        <p class="sr-only" aria-live="polite" data-carousel-target="status"></p>
                     {% endif %}
                 </div>
             {% endif %}
