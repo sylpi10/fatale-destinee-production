@@ -92,7 +92,8 @@ final class ShowCrudControllerTest extends WebTestCase
             self::assertSame(IMAGETYPE_WEBP, exif_imagetype($stored));
 
             $client->request('GET', '/spectacles/spectacle-illustre');
-            self::assertSelectorExists(\sprintf('img[src$="/uploads/spectacles/%s"][alt="Affiche du spectacle"]', $show->getImage()));
+            // The size of the stored file, and loaded first: it is the largest image of the page.
+            self::assertSelectorExists(\sprintf('.show-banner img[src$="/uploads/spectacles/%s"][alt="Affiche du spectacle"][width="30"][height="20"][fetchpriority="high"]', $show->getImage()));
         } finally {
             @unlink($stored);
             @unlink($png);

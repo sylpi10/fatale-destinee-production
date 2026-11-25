@@ -9,8 +9,8 @@
 
 {% block layout %}
     <div class="home">
-        <img src="{{ asset('images/teddy.webp') }}" class="home-figure home-figure--left" width="300" alt="Teddy Moulin">
-        <img src="{{ asset('images/angeline.webp') }}" class="home-figure home-figure--right" height="300" alt="Angéline Delourme">
+        <img src="{{ asset('images/teddy.webp') }}" class="home-figure home-figure--left" width="1024" height="1536" alt="Teddy Moulin">
+        <img src="{{ asset('images/angeline.webp') }}" class="home-figure home-figure--right" width="1024" height="1536" alt="Angéline Delourme">
 
         <main id="contenu" class="home-center" tabindex="-1">
             <twig:FlashMessages />
@@ -20,7 +20,7 @@
                     data-action="logo-sound#play"
                     data-logo-sound-phrases-value="{{ ['Aïe !', 'Touche pas à mon chapeau !', 'Ouille !', 'Hé ho, doucement !']|json_encode }}"
                 >
-                    <img src="{{ asset('images/logo-fdp.webp') }}" alt="Fatale Destinée Production" width="1024" height="1024">
+                    <img src="{{ asset('images/logo-fdp.webp') }}" alt="Fatale Destinée Production" width="1024" height="1024" fetchpriority="high">
                 </button>
             </h1>
 

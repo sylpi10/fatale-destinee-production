@@ -76,6 +76,8 @@ final class SitePagesTest extends WebTestCase
 
             // An empty alt is allowed (decorative image), a missing one is not.
             self::assertSame(0, $crawler->filter('img:not([alt])')->count(), $url);
+            // Without its size, an image makes the page jump when it loads.
+            self::assertSame(0, $crawler->filter('img:not([width]), img:not([height])')->count(), $url);
         }
     }
 

@@ -9,7 +9,7 @@
 
     <div class="shows">
         {% for show in shows %}
-            <twig:ShowCard :show="show" />
+            <twig:ShowCard :show="show" :lazy="loop.index > 2" />
         {% else %}
             <p>Les spectacles arrivent bientôt.</p>
         {% endfor %}

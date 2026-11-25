@@ -1,8 +1,9 @@
-{% props show %}
+{# lazy: false for the cards visible without scrolling, so they don't wait for the layout. #}
+{% props show, lazy = true %}
 <a class="show-card" href="{{ path('app_show', {slug: show.slug}) }}">
     {% if show.image %}
         {# Decorative: the title right below already names the link. #}
-        <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
+        <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" {{ image_size('uploads/spectacles/' ~ show.image) }}{% if lazy %} loading="lazy"{% endif %}>
     {% endif %}
     <div class="card-footer">
         <h2>{{ show.title }}</h2>
