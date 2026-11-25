@@ -19,6 +19,7 @@ final class SitePagesTest extends WebTestCase
         yield 'agenda' => ['/agenda', 'Agenda'];
         yield 'workshops' => ['/ateliers', 'Les ateliers'];
         yield 'contact' => ['/contact', 'Contact'];
+        yield 'local' => ['/compagnie-clown-theatre-montpellier', 'Compagnie de clown et de théâtre à Montpellier'];
         yield 'login' => ['/login', 'Connexion'];
     }
 
@@ -50,6 +51,21 @@ final class SitePagesTest extends WebTestCase
         }
 
         self::assertSame($descriptions, array_unique($descriptions));
+    }
+
+    public function testTheLocalPageIsLinkedFromTheFooterAndDescribesTheCompany(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/contact');
+        $crawler = $client->clickLink('Compagnie de clown à Montpellier');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('title', 'Compagnie de clown et de théâtre à Montpellier');
+        $data = json_decode($crawler->filter('script[type="application/ld+json"]')->text(), true, flags: \JSON_THROW_ON_ERROR);
+        self::assertSame('PerformingGroup', $data['@type']);
+        self::assertSame('Fatale Destinée Production', $data['name']);
+        self::assertSame('Montpellier', $data['areaServed'][0]['name']);
+        self::assertSame('http://localhost/', $data['url']);
     }
 
     public function testLoginPageIsNotIndexed(): void

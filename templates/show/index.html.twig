@@ -9,15 +9,7 @@
 
     <div class="shows">
         {% for show in shows %}
-            <a class="show-card" href="{{ path('app_show', {slug: show.slug}) }}">
-                {% if show.image %}
-                    <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
-                {% endif %}
-                <div class="card-footer">
-                    <h2>{{ show.title }}</h2>
-                    <p>{{ [show.member ? show.member.fullName, show.genre, show.creationYear ? 'Création ' ~ show.creationYear]|filter(v => v)|join(' · ') }}</p>
-                </div>
-            </a>
+            <twig:ShowCard :show="show" />
         {% else %}
             <p>Les spectacles arrivent bientôt.</p>
         {% endfor %}

@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compagnie de clown et de théâtre à Montpellier – {{ parent() }}{% endblock %}
+
+{% block description %}Fatale Destinée Production, compagnie de clown et de théâtre à Montpellier : spectacles en salle et en rue en Occitanie, ateliers clown et théâtre.{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Tells search engines who the company is and where it works (local results, knowledge panel). #}
+    <script type="application/ld+json">
+        {{ {
+            '@context': 'https://schema.org',
+            '@type': 'PerformingGroup',
+            name: 'Fatale Destinée Production',
+            alternateName: 'FDP',
+            url: absolute_url(path('app_home')),
+            logo: absolute_url(asset('images/logo-fdp.webp')),
+            description: 'Compagnie de clown et de théâtre de l’absurde basée à Montpellier.',
+            foundingDate: '2025',
+            founder: [
+                {'@type': 'Person', name: 'Angéline Delourme'},
+                {'@type': 'Person', name: 'Teddy Moulin'},
+            ],
+            areaServed: [
+                {'@type': 'City', name: 'Montpellier'},
+                {'@type': 'AdministrativeArea', name: 'Hérault'},
+                {'@type': 'AdministrativeArea', name: 'Occitanie'},
+            ],
+            email: contact_email,
+            telephone: '+33686554086',
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}
+    </script>
+{% endblock %}
+
+{% block body %}
+    <twig:PageTitle title="Compagnie de clown et de théâtre à Montpellier" subtitle="Fatale Destinée Production" />
+
+    <section class="section local-intro">
+        <p>
+            <strong>Fatale Destinée Production</strong> est une compagnie de <strong>clown et de théâtre</strong>
+            créée en 2025 à <strong>Montpellier</strong> par Angéline Delourme et Teddy Moulin.
+            Elle crée des spectacles où l’absurde, l’humour décalé et la poésie interrogent notre place dans le monde.
+        </p>
+        <p>
+            Ses spectacles se jouent <strong>en salle et en rue</strong> : théâtres, festivals, saisons culturelles,
+            médiathèques et communes de l’<strong>Hérault</strong> et d’<strong>Occitanie</strong>, et au-delà.
+        </p>
+        <p><a class="button" href="{{ path('app_contact') }}">Programmer un spectacle</a></p>
+    </section>
+
+    {% if shows is not empty %}
+        <section class="section">
+            <h2 class="label frame frame--ink">Spectacles de clown en salle et en rue</h2>
+            <div class="shows">
+                {% for show in shows %}
+                    <twig:ShowCard :show="show" />
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if performances is not empty %}
+        <section class="section">
+            <h2 class="label frame frame--ink">Prochaines dates</h2>
+            <ul class="agenda">
+                {% for performance in performances %}
+                    <li class="agenda-row">
+                        <span class="agenda-row-date">{{ performance.date|format_date(pattern: 'd MMM y') }}</span>
+                        <a class="agenda-row-show agenda-row-show--{{ performance.show.member.username|default('') }}"
+                            href="{{ path('app_show', {slug: performance.show.slug}) }}">{{ performance.show.title }}</a>
+                        <span class="agenda-row-place">{{ performance.place }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p><a href="{{ path('app_agenda') }}">Tout l’agenda</a></p>
+        </section>
+    {% endif %}
+
+    <section class="section">
+        <h2 class="label frame frame--ink">Ateliers clown et théâtre</h2>
+        <p>
+            Avec <strong>les ateliers du Maréchal Fraîcheur</strong>, la compagnie transmet son travail :
+            improvisation, jeu clownesque, corps et voix, pour les amateurs qui veulent monter sur scène.
+        </p>
+        <p><a href="{{ path('app_workshops') }}">Découvrir les ateliers</a> · <a href="{{ path('app_contact') }}">S’inscrire</a></p>
+    </section>
+{% endblock %}

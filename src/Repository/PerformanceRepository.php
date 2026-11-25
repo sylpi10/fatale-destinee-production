@@ -24,7 +24,7 @@ class PerformanceRepository extends ServiceEntityRepository
      *
      * @return list<Performance>
      */
-    public function findUpcoming(\DateTimeImmutable $today): array
+    public function findUpcoming(\DateTimeImmutable $today, ?int $limit = null): array
     {
         return $this->createQueryBuilder('performance')
             // "member" is a DQL keyword (MEMBER OF): the aliases are prefixed.
@@ -35,6 +35,7 @@ class PerformanceRepository extends ServiceEntityRepository
             ->andWhere('performance.date >= :today')
             ->setParameter('today', $today, Types::DATE_IMMUTABLE)
             ->orderBy('performance.date', 'ASC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
