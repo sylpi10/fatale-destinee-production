@@ -28,3 +28,7 @@
 # Files uploaded from the admin
 /public/uploads/*/*
 !/public/uploads/*/.gitkeep
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###

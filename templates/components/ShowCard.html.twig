@@ -3,7 +3,7 @@
 <a class="show-card" href="{{ path('app_show', {slug: show.slug}) }}">
     {% if show.image %}
         {# Decorative: the title right below already names the link. #}
-        <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" {{ image_size('uploads/spectacles/' ~ show.image) }}{% if lazy %} loading="lazy"{% endif %}>
+        <img {{ image_attrs('uploads/spectacles/' ~ show.image, '(min-width: 1220px) 560px, (min-width: 700px) 50vw, 100vw') }} alt=""{% if lazy %} loading="lazy"{% endif %}>
     {% endif %}
     <div class="card-footer">
         <h2>{{ show.title }}</h2>

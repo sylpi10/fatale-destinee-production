@@ -1,0 +1,22 @@
+# Documentation on how to configure the bundle can be found at: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
+liip_imagine:
+    # valid drivers options include "gd" or "gmagick" or "imagick"
+    driver: "gd"
+
+    # Smaller copies of the admin photos (public/uploads, 2400 px at most), made on the first
+    # request and stored in public/media/cache. Templates list them in srcset with image_attrs().
+    # Quality 90: at these sizes it can't be told from 95, for a third less weight.
+    default_filter_set_settings:
+        format: webp
+        quality: 90
+
+    filter_sets:
+        w400:
+            filters:
+                downscale: { max: [400, 10000] }
+        w800:
+            filters:
+                downscale: { max: [800, 10000] }
+        w1600:
+            filters:
+                downscale: { max: [1600, 10000] }

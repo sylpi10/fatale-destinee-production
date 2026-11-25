@@ -69,7 +69,7 @@ final class ShowCrudControllerTest extends WebTestCase
         $client->followRedirects();
 
         $png = sys_get_temp_dir().'/affiche-'.bin2hex(random_bytes(4)).'.png';
-        imagepng(imagecreatetruecolor(30, 20), $png);
+        imagepng(imagecreatetruecolor(1000, 750), $png);
 
         $crawler = $client->request('GET', '/admin');
         $crawler = $client->click($crawler->selectLink('Créer Spectacle')->link());
@@ -86,16 +86,31 @@ final class ShowCrudControllerTest extends WebTestCase
         $show = static::getContainer()->get(ShowRepository::class)->findOneBy(['slug' => 'spectacle-illustre']);
         self::assertInstanceOf(Show::class, $show);
         self::assertStringEndsWith('.webp', (string) $show->getImage());
-        $stored = static::getContainer()->getParameter('kernel.project_dir').'/public/uploads/spectacles/'.$show->getImage();
+        $publicDir = static::getContainer()->getParameter('kernel.project_dir').'/public';
+        $stored = $publicDir.'/uploads/spectacles/'.$show->getImage();
+        $copy = $publicDir.'/media/cache/w400/uploads/spectacles/'.$show->getImage();
 
         try {
             self::assertSame(IMAGETYPE_WEBP, exif_imagetype($stored));
 
-            $client->request('GET', '/spectacles/spectacle-illustre');
+            $crawler = $client->request('GET', '/spectacles/spectacle-illustre');
             // The size of the stored file, and loaded first: it is the largest image of the page.
-            self::assertSelectorExists(\sprintf('.show-banner img[src$="/uploads/spectacles/%s"][alt="Affiche du spectacle"][width="30"][height="20"][fetchpriority="high"]', $show->getImage()));
+            $banner = $crawler->filter('.show-banner img[alt="Affiche du spectacle"][width="1000"][height="750"][fetchpriority="high"]');
+            self::assertCount(1, $banner);
+            // Smaller copies for small screens, the original last; no 1600 copy of a 1000 px photo.
+            self::assertSame(
+                \sprintf('/media/cache/resolve/w400/uploads/spectacles/%1$s 400w, /media/cache/resolve/w800/uploads/spectacles/%1$s 800w, /uploads/spectacles/%1$s 1000w', $show->getImage()),
+                $banner->attr('srcset'),
+            );
+
+            // The first request of a copy makes it, then sends to the stored file.
+            $client->followRedirects(false);
+            $client->request('GET', '/media/cache/resolve/w400/uploads/spectacles/'.$show->getImage());
+            self::assertResponseRedirects();
+            self::assertSame([400, 300, IMAGETYPE_WEBP], \array_slice(getimagesize($copy), 0, 3));
         } finally {
             @unlink($stored);
+            @unlink($copy);
             @unlink($png);
         }
     }

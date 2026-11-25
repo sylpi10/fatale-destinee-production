@@ -10,7 +10,7 @@
     {# Sketch 5: photo, back to the list, title, genre and key facts. #}
     <div class="show-banner">
         {% if show.image %}
-            <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="{{ show.imageAlt ?: 'Photo du spectacle ' ~ show.title }}" {{ image_size('uploads/spectacles/' ~ show.image) }} fetchpriority="high">
+            <img {{ image_attrs('uploads/spectacles/' ~ show.image, '(min-width: 1220px) 1124px, 100vw') }} alt="{{ show.imageAlt ?: 'Photo du spectacle ' ~ show.title }}" fetchpriority="high">
         {% endif %}
         <div class="signpost-container">
             <a class="signpost" href="{{ path('app_shows') }}">Spectacles</a>
@@ -109,7 +109,7 @@
                     <ul id="{{ 'carousel-' ~ show.slug }}" class="carousel-track" data-carousel-target="track" data-action="scroll->carousel#update" tabindex="0" aria-label="Photos, à faire défiler avec les flèches du clavier">
                         {% for photo in show.galleryPhotos %}
                             <li role="group" aria-roledescription="photo" aria-label="{{ loop.index }} sur {{ loop.length }}">
-                                <img src="{{ asset('uploads/spectacles/' ~ photo) }}" alt="{{ show.title }} – photo {{ loop.index }} sur {{ loop.length }}" {{ image_size('uploads/spectacles/' ~ photo) }} loading="lazy">
+                                <img {{ image_attrs('uploads/spectacles/' ~ photo, '(min-width: 1220px) 560px, (min-width: 960px) 50vw, 100vw') }} alt="{{ show.title }} – photo {{ loop.index }} sur {{ loop.length }}" loading="lazy">
                             </li>
                         {% endfor %}
                     </ul>
