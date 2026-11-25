@@ -75,6 +75,9 @@ final class ShowCrudController extends AbstractCrudController
             ->setFormTypeOption('upload_new', $this->webpConverter)
             ->mimeTypes('image/jpeg,image/png,image/gif,image/webp', 'JPEG, PNG, GIF ou WebP uniquement.')
             ->setHelp('En haut de la page et dans la liste des spectacles.');
+        yield TextField::new('imageAlt', 'Description de la photo')
+            ->setHelp('Ce que montre la photo, pour les malvoyants et Google (texte alternatif). Ex. : Moroze, en combinaison orange, traverse la scène avec une valise. Vide : « Photo du spectacle » et le titre.')
+            ->hideOnIndex();
         yield AssociationField::new('member', 'Porté par')
             ->setQueryBuilder(static fn ($queryBuilder) => $queryBuilder->andWhere('entity.member = true'))
             ->setHelp('Membre de la compagnie (voir « Membres et comptes »).');

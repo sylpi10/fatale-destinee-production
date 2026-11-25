@@ -90,6 +90,11 @@ class Show
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    /** Alternative text of the image: what it shows, for screen readers and search engines. */
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    private ?string $imageAlt = null;
+
     // Documents of the "Espace pro", file names in public/uploads/spectacles.
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $pressKit = null;
@@ -321,6 +326,18 @@ class Show
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageAlt(): ?string
+    {
+        return $this->imageAlt;
+    }
+
+    public function setImageAlt(?string $imageAlt): static
+    {
+        $this->imageAlt = $imageAlt;
 
         return $this;
     }

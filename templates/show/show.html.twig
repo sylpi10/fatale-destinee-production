@@ -10,7 +10,7 @@
     {# Sketch 5: photo, back to the list, title, genre and key facts. #}
     <div class="show-banner">
         {% if show.image %}
-            <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
+            <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="{{ show.imageAlt ?: 'Photo du spectacle ' ~ show.title }}" width="1600" height="1200">
         {% endif %}
         <div class="signpost-container">
             <a class="signpost" href="{{ path('app_shows') }}">Spectacles</a>
@@ -107,7 +107,7 @@
                 <div class="carousel frame" data-controller="carousel">
                     <ul class="carousel-track" data-carousel-target="track" tabindex="0" aria-label="Photos du spectacle">
                         {% for photo in show.galleryPhotos %}
-                            <li><img src="{{ asset('uploads/spectacles/' ~ photo) }}" alt="Photo {{ loop.index }} sur {{ loop.length }}" loading="lazy"></li>
+                            <li><img src="{{ asset('uploads/spectacles/' ~ photo) }}" alt="{{ show.title }} – photo {{ loop.index }} sur {{ loop.length }}" loading="lazy"></li>
                         {% endfor %}
                     </ul>
                     {% if show.galleryPhotos|length > 1 %}

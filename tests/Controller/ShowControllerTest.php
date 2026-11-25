@@ -146,6 +146,22 @@ final class ShowControllerTest extends WebTestCase
         self::assertSelectorTextSame('h1', 'Girouette');
     }
 
+    public function testTheMainPhotoHasTheAltTextTypedInTheAdmin(): void
+    {
+        $this->persist(
+            (new Show())->setTitle('Girouette')->setSlug('girouette')->setPublished(true)
+                ->setImage('girouette.webp')->setImageAlt('Girouette, en robe noire, dans la lumière d’une poursuite'),
+            (new Show())->setTitle('Moroze')->setSlug('moroze')->setPublished(true)->setImage('moroze.webp'),
+        );
+
+        $this->client->request('GET', '/spectacles/girouette');
+        self::assertSelectorExists('.show-banner img[alt="Girouette, en robe noire, dans la lumière d’une poursuite"]');
+
+        // Nothing typed: the title of the show.
+        $this->client->request('GET', '/spectacles/moroze');
+        self::assertSelectorExists('.show-banner img[alt="Photo du spectacle Moroze"]');
+    }
+
     public function testThePhotosOfTheShowAreInACarousel(): void
     {
         $this->persist((new Show())
@@ -161,6 +177,7 @@ final class ShowControllerTest extends WebTestCase
             $this->client->getCrawler()->filter('[data-controller="carousel"] img')->each(static fn ($img): ?string => $img->attr('src')),
         );
         self::assertSelectorExists('[data-action="carousel#next"]');
+        self::assertSelectorExists('.carousel img[alt="Girouette – photo 2 sur 2"]');
     }
 
     public function testTheShowDescriptionComesFromItsTexts(): void

@@ -1,6 +1,7 @@
 {% props show %}
 <a class="show-card" href="{{ path('app_show', {slug: show.slug}) }}">
     {% if show.image %}
+        {# Decorative: the title right below already names the link. #}
         <img src="{{ asset('uploads/spectacles/' ~ show.image) }}" alt="" width="1600" height="1200">
     {% endif %}
     <div class="card-footer">

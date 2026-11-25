@@ -8,7 +8,7 @@
     {# Sketch 2: an image (the logo by default) and the presentation of the company. #}
     <section class="section company-intro">
         {% if company.image %}
-            <img src="{{ asset('uploads/compagnie/' ~ company.image) }}" alt="">
+            <img src="{{ asset('uploads/compagnie/' ~ company.image) }}" alt="{{ company.imageAlt }}">
         {% else %}
             <img src="{{ asset('images/logo-fdp.webp') }}" alt="" width="1024" height="1024">
         {% endif %}
@@ -27,7 +27,7 @@
                 <article class="member">
                     {% if member.photo %}
                         <div class="portrait frame">
-                            <img src="{{ asset('uploads/compagnie/' ~ member.photo) }}" alt="{{ member.fullName }}">
+                            <img src="{{ asset('uploads/compagnie/' ~ member.photo) }}" alt="Portrait de {{ member.fullName }}">
                         </div>
                     {% endif %}
                     <h2>{{ member.fullName }}</h2>

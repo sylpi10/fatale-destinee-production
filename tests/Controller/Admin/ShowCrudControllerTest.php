@@ -79,6 +79,7 @@ final class ShowCrudControllerTest extends WebTestCase
             'Show[published]' => '1',
         ]);
         $form['Show[image][file]']->upload($png);
+        $form['Show[imageAlt]'] = 'Affiche du spectacle';
         $client->submit($form);
         self::assertResponseIsSuccessful();
 
@@ -91,7 +92,7 @@ final class ShowCrudControllerTest extends WebTestCase
             self::assertSame(IMAGETYPE_WEBP, exif_imagetype($stored));
 
             $client->request('GET', '/spectacles/spectacle-illustre');
-            self::assertSelectorExists(\sprintf('img[src$="/uploads/spectacles/%s"]', $show->getImage()));
+            self::assertSelectorExists(\sprintf('img[src$="/uploads/spectacles/%s"][alt="Affiche du spectacle"]', $show->getImage()));
         } finally {
             @unlink($stored);
             @unlink($png);

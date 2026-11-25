@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 /**
  * The single company row: the menu links straight to its edit page.
@@ -61,6 +62,8 @@ final class CompanyCrudController extends AbstractCrudController
             ->setFormTypeOption('upload_new', $this->webpConverter)
             ->mimeTypes('image/jpeg,image/png,image/gif,image/webp', 'JPEG, PNG, GIF ou WebP uniquement.')
             ->setHelp('À côté du texte de présentation. Vide : le logo.');
+        yield TextField::new('imageAlt', 'Description de l’image')
+            ->setHelp('Ce que montre l’image, pour les malvoyants et Google (texte alternatif). Vide : image décorative, ignorée par les lecteurs d’écran.');
         yield TextareaField::new('presentation', 'Présentation')
             ->setNumOfRows(14)
             ->setHelp('Séparer les paragraphes par une ligne vide.');

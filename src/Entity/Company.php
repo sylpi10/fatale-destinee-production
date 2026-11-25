@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Repository\CompanyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * The company itself, top of the Compagnie page (sketch 2). Only one row.
@@ -22,6 +23,11 @@ class Company
     /** Next to the presentation; the logo when empty. File name in public/uploads/compagnie. */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
+
+    /** Alternative text of the image: what it shows, for screen readers and search engines. */
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    private ?string $imageAlt = null;
 
     /** Paragraphs separated by a blank line. */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -45,6 +51,18 @@ class Company
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageAlt(): ?string
+    {
+        return $this->imageAlt;
+    }
+
+    public function setImageAlt(?string $imageAlt): static
+    {
+        $this->imageAlt = $imageAlt;
 
         return $this;
     }

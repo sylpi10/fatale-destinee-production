@@ -68,6 +68,17 @@ final class SitePagesTest extends WebTestCase
         self::assertSame('http://localhost/', $data['url']);
     }
 
+    public function testEveryImageHasAnAltAttribute(): void
+    {
+        $client = static::createClient();
+        foreach (['/', ...array_column(iterator_to_array(self::pages()), 0)] as $url) {
+            $crawler = $client->request('GET', $url);
+
+            // An empty alt is allowed (decorative image), a missing one is not.
+            self::assertSame(0, $crawler->filter('img:not([alt])')->count(), $url);
+        }
+    }
+
     public function testLoginPageIsNotIndexed(): void
     {
         $client = static::createClient();
