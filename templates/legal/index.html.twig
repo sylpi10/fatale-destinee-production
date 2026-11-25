@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales – {{ parent() }}{% endblock %}
+
+{% block description %}Mentions légales et politique de confidentialité du site de Fatale Destinée Production : éditeur, hébergeur, données personnelles et cookies.{% endblock %}
+
+{% block body %}
+    <twig:PageTitle title="Mentions légales" />
+
+    <section class="section">
+        <h2 class="label frame frame--ink">Éditeur du site</h2>
+        <p>
+            Le site {{ absolute_url(path('app_home'))|trim('/', 'right') }} est édité par
+            <strong>Fatale Destinée Production</strong>
+            {%- if company.legalForm %}, {{ company.legalForm }}{% endif %}
+            {%- if company.registrationNumber %}, {{ company.registrationNumber|trim|upper starts with 'W' ? 'RNA' : 'SIRET' }} {{ company.registrationNumber }}{% endif %}.
+        </p>
+        {% if company.address %}
+            <p>Siège social :<br>{{ company.address|nl2br }}</p>
+        {% endif %}
+        <p>
+            Contact : <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> ·
+            <a href="tel:+33686554086">06 86 55 40 86</a>
+        </p>
+        {% if company.publicationDirector %}
+            <p>Direction de la publication : {{ company.publicationDirector }}.</p>
+        {% endif %}
+    </section>
+
+    <section class="section">
+        <h2 class="label frame frame--ink">Hébergement</h2>
+        <p>
+            Le site est hébergé par <strong>o2switch</strong>, SAS,
+            222-224 boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France –
+            <a href="https://www.o2switch.fr">www.o2switch.fr</a>.
+        </p>
+    </section>
+
+    <section class="section">
+        <h2 class="label frame frame--ink">Propriété intellectuelle</h2>
+        <p>
+            Les textes, photographies, logos et illustrations de ce site appartiennent à Fatale Destinée Production
+            ou à leurs auteurs. Toute reproduction, même partielle, sans autorisation écrite est interdite.
+        </p>
+    </section>
+
+    <section class="section">
+        <h2 class="label frame frame--ink">Données personnelles</h2>
+        <p>
+            Le formulaire de <a href="{{ path('app_contact') }}">contact</a> recueille votre nom, votre adresse
+            e-mail et votre message. Ces informations servent uniquement à vous répondre, sur la base de votre
+            demande. Elles sont envoyées par e-mail à la compagnie et ne sont ni enregistrées sur le site,
+            ni transmises à des tiers. Elles sont conservées le temps nécessaire au traitement de votre demande.
+        </p>
+        <p>
+            Conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et
+            Libertés, vous pouvez accéder à vos données, les faire rectifier ou supprimer, et vous opposer à leur
+            traitement en écrivant à <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.
+            Vous pouvez aussi adresser une réclamation à la <a href="https://www.cnil.fr">CNIL</a>.
+        </p>
+    </section>
+
+    <section class="section">
+        <h2 class="label frame frame--ink">Cookies</h2>
+        <p>
+            Le site n’utilise aucun cookie publicitaire ni outil de mesure d’audience, et les polices sont servies
+            par le site lui-même. Seuls des cookies techniques, nécessaires à la connexion de l’espace
+            d’administration et à l’envoi du formulaire de contact, peuvent être déposés ; ils ne requièrent pas
+            votre consentement.
+        </p>
+    </section>
+{% endblock %}

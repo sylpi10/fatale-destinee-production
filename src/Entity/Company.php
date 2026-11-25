@@ -33,6 +33,26 @@ class Company
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $presentation = null;
 
+    /** Legal notice (LCEN): association, SARL… */
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100)]
+    private ?string $legalForm = null;
+
+    /** Legal notice: SIRET, or RNA number for an association without one. */
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
+    private ?string $registrationNumber = null;
+
+    /** Legal notice: registered office, one line per row of the address. */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(max: 500)]
+    private ?string $address = null;
+
+    /** Legal notice: the person legally responsible for what the site publishes. */
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    private ?string $publicationDirector = null;
+
     public function __toString(): string
     {
         return 'La compagnie';
@@ -75,6 +95,54 @@ class Company
     public function setPresentation(?string $presentation): static
     {
         $this->presentation = $presentation;
+
+        return $this;
+    }
+
+    public function getLegalForm(): ?string
+    {
+        return $this->legalForm;
+    }
+
+    public function setLegalForm(?string $legalForm): static
+    {
+        $this->legalForm = $legalForm;
+
+        return $this;
+    }
+
+    public function getRegistrationNumber(): ?string
+    {
+        return $this->registrationNumber;
+    }
+
+    public function setRegistrationNumber(?string $registrationNumber): static
+    {
+        $this->registrationNumber = $registrationNumber;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPublicationDirector(): ?string
+    {
+        return $this->publicationDirector;
+    }
+
+    public function setPublicationDirector(?string $publicationDirector): static
+    {
+        $this->publicationDirector = $publicationDirector;
 
         return $this;
     }

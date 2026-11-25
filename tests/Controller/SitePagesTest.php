@@ -20,6 +20,7 @@ final class SitePagesTest extends WebTestCase
         yield 'workshops' => ['/ateliers', 'Les ateliers'];
         yield 'contact' => ['/contact', 'Contact'];
         yield 'local' => ['/compagnie-clown-theatre-montpellier', 'Compagnie de clown et de théâtre à Montpellier'];
+        yield 'legal' => ['/mentions-legales', 'Mentions légales'];
         yield 'login' => ['/login', 'Connexion'];
     }
 
@@ -66,6 +67,22 @@ final class SitePagesTest extends WebTestCase
         self::assertSame('Fatale Destinée Production', $data['name']);
         self::assertSame('Montpellier', $data['areaServed'][0]['name']);
         self::assertSame('http://localhost/', $data['url']);
+    }
+
+    public function testTheLegalNoticeIsLinkedFromTheFooterAndNamesThePublisherAndTheHost(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/agenda');
+        $client->clickLink('Mentions légales');
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('main', 'Fatale Destinée Production');
+        self::assertSelectorTextContains('main', 'o2switch');
+        self::assertSelectorExists('main a[href^="mailto:"]');
+        self::assertSelectorExists('main a[href="/contact"]');
+        // Nothing filled in the admin yet: no empty line, no placeholder.
+        self::assertSelectorTextNotContains('main', 'Siège social');
+        self::assertSelectorTextNotContains('main', 'compléter');
     }
 
     public function testEveryImageHasAnAltAttribute(): void
