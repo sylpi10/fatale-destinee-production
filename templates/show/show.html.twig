@@ -2,6 +2,8 @@
 
 {% block title %}{{ show.title }} – {{ parent() }}{% endblock %}
 
+{% block description %}{{ ([show.catchphrase, show.synopsis]|filter(text => text)|join(' ') ?: show.title ~ (show.genre ? ', ' ~ show.genre|lower) ~ ', un spectacle de Fatale Destinée Production.')|excerpt }}{% endblock %}
+
 {% block page_class %}page--show{% endblock %}
 
 {% block body %}

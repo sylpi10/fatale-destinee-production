@@ -37,6 +37,29 @@ final class SitePagesTest extends WebTestCase
         self::assertSelectorExists('.site-footer');
     }
 
+    public function testEveryPageHasItsOwnMetaDescription(): void
+    {
+        $client = static::createClient();
+        $descriptions = [];
+        foreach (['/', ...array_column(iterator_to_array(self::pages()), 0)] as $url) {
+            $crawler = $client->request('GET', $url);
+            $descriptions[$url] = $crawler->filter('meta[name="description"]')->attr('content');
+
+            self::assertNotEmpty($descriptions[$url], $url);
+            self::assertLessThanOrEqual(160, mb_strlen($descriptions[$url]), $url);
+        }
+
+        self::assertSame($descriptions, array_unique($descriptions));
+    }
+
+    public function testLoginPageIsNotIndexed(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/login');
+
+        self::assertSelectorExists('meta[name="robots"][content="noindex"]');
+    }
+
     public function testHomeShowsTheLogoAndTheMenuOfTheBrief(): void
     {
         $client = static::createClient();

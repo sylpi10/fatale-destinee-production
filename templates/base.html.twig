@@ -5,7 +5,9 @@
         <title>{% block title %}Fatale Destinée Production{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
-        <meta name="description" content="Fatale Destinée Production – compagnie de théâtre et de clown créée par Angéline Delourme et Teddy Moulin.">
+        {# Each page overrides the description block, on one line: Google shows it under the title in its results. #}
+        <meta name="description" content="{% block description %}Fatale Destinée Production, compagnie de clown et de théâtre de l’absurde créée en 2025 par Angéline Delourme et Teddy Moulin.{% endblock %}">
+        {% block robots %}{% endblock %}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&display=swap" rel="stylesheet">

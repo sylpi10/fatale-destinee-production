@@ -163,6 +163,23 @@ final class ShowControllerTest extends WebTestCase
         self::assertSelectorExists('[data-action="carousel#next"]');
     }
 
+    public function testTheShowDescriptionComesFromItsTexts(): void
+    {
+        $this->client->request('GET', '/spectacles/qu-est-ce-que-je-fous-la');
+        self::assertSame(
+            'Moroze cherche sa place. Premier paragraphe. Second paragraphe.',
+            $this->client->getCrawler()->filter('meta[name="description"]')->attr('content'),
+        );
+
+        // Without any text yet: the title and the genre.
+        $this->persist((new Show())->setTitle('Girouette')->setSlug('girouette')->setPublished(true)->setGenre('Clown'));
+        $this->client->request('GET', '/spectacles/girouette');
+        self::assertSame(
+            'Girouette, clown, un spectacle de Fatale Destinée Production.',
+            $this->client->getCrawler()->filter('meta[name="description"]')->attr('content'),
+        );
+    }
+
     public function testUnpublishedOrUnknownShowIsNotFound(): void
     {
         $this->client->request('GET', '/spectacles/brouillon');

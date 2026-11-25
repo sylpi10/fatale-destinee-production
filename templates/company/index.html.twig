@@ -2,6 +2,8 @@
 
 {% block title %}Compagnie – {{ parent() }}{% endblock %}
 
+{% block description %}{{ company.presentation|excerpt ?: 'La compagnie Fatale Destinée Production : son histoire, sa démarche artistique et ses membres, Teddy Moulin et Angéline Delourme.' }}{% endblock %}
+
 {% block body %}
     {# Sketch 2: an image (the logo by default) and the presentation of the company. #}
     <section class="section company-intro">

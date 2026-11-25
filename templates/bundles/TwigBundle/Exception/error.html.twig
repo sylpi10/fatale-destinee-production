@@ -10,6 +10,10 @@
 
 {% block title %}{{ message.title }} – {{ parent() }}{% endblock %}
 
+{% block description %}{{ message.description }}{% endblock %}
+
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+
 {% block body %}
     <twig:PageTitle :title="status_code" :subtitle="message.title" />
 

@@ -2,6 +2,8 @@
 
 {% block title %}Spectacles – {{ parent() }}{% endblock %}
 
+{% block description %}{{ shows is empty ? 'Les spectacles de clown et de théâtre de l’absurde de Fatale Destinée Production.' : ('Les spectacles de clown de Fatale Destinée Production : ' ~ shows|map(show => show.title)|join(', ') ~ '.')|excerpt }}{% endblock %}
+
 {% block body %}
     <twig:PageTitle title="Spectacles" />
 
