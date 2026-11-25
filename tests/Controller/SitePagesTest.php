@@ -78,6 +78,8 @@ final class SitePagesTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main', 'Fatale Destinée Production');
         self::assertSelectorTextContains('main', 'o2switch');
+        self::assertSelectorTextContains('main', 'Site conçu et développé par Sylvain Pillet.');
+        self::assertSelectorTextSame('.site-footer .site-footer-credit', 'Site développé par Sylvain Pillet');
         self::assertSelectorExists('main a[href^="mailto:"]');
         self::assertSelectorExists('main a[href="/contact"]');
         // Nothing filled in the admin yet: no empty line, no placeholder.

@@ -185,6 +185,14 @@
     p {
         margin: 0;
     }
+
+    .site-footer-credit {
+        margin: 6px auto;
+        font-size: 0.8rem;
+        width: fit-content;
+        padding: 0 24px;
+        border-top: solid 1px #ccc;
+    }
 }
 
 .label--spaced {
