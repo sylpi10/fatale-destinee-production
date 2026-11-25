@@ -114,6 +114,22 @@ final class SitePagesTest extends WebTestCase
         }
     }
 
+    public function testFontsAreServedByTheSiteItself(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/agenda');
+
+        // No request to Google Fonts: faster, and no visitor IP sent to Google.
+        self::assertStringNotContainsString('fonts.googleapis.com', (string) $client->getResponse()->getContent());
+        // Compared without the version AssetMapper adds to the name: "-" and 7 characters.
+        self::assertSame(
+            ['/assets/fonts/lora-latin-400-normal', '/assets/fonts/oswald-latin-700-normal'],
+            $crawler->filter('link[rel="preload"][as="font"][crossorigin]')->each(
+                static fn ($link): string => preg_replace('/-.{7}\.woff2$/', '', (string) $link->attr('href')),
+            ),
+        );
+    }
+
     public function testLoginPageIsNotIndexed(): void
     {
         $client = static::createClient();
