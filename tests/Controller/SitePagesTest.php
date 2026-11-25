@@ -97,6 +97,21 @@ final class SitePagesTest extends WebTestCase
         self::assertSelectorExists('footer[data-menu-inert]');
     }
 
+    public function testEveryPageHasASharePreviewAndACanonicalUrl(): void
+    {
+        $client = static::createClient();
+        foreach (['/', ...array_column(iterator_to_array(self::pages()), 0)] as $url) {
+            $crawler = $client->request('GET', $url);
+            $meta = static fn (string $property): ?string => $crawler->filter(\sprintf('meta[property="%s"]', $property))->attr('content');
+
+            self::assertSame('http://localhost'.$url, $crawler->filter('link[rel="canonical"]')->attr('href'), $url);
+            self::assertSame('http://localhost'.$url, $meta('og:url'), $url);
+            self::assertSame($crawler->filter('title')->text(), $meta('og:title'), $url);
+            self::assertSame($crawler->filter('meta[name="description"]')->attr('content'), $meta('og:description'), $url);
+            self::assertMatchesRegularExpression('#^http://localhost/assets/images/og-fatale-destinee-[\w-]+\.jpg$#', (string) $meta('og:image'), $url);
+        }
+    }
+
     public function testLoginPageIsNotIndexed(): void
     {
         $client = static::createClient();
